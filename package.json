@@ -1,0 +1,31 @@
+{
+  "name": "happylokam-web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "clean": "node -e \"require('fs').rmSync('.next',{ recursive: true, force: true })\"",
+    "predev": "npm run clean",
+    "prebuild": "npm run clean",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.12.6",
+    "clsx": "^2.1.1",
+    "graphql": "^16.10.0",
+    "lucide-react": "^0.469.0",
+    "next": "^15.1.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2"
+  }
+}
