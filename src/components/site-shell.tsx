@@ -32,7 +32,7 @@ function BrandMark({ compact = false }: { compact?: boolean }) {
         HL
       </div>
       <div className={compact ? '' : 'hidden sm:block'}>
-        <p className="font-display text-xl font-black tracking-tight text-slate-950">Happylokam</p>
+        <p className="font-display text-xl font-black tracking-tight text-slate-950">happylokam</p>
         <p className="text-[10px] font-bold uppercase tracking-[0.38em] text-rose-600">Premium Event Network</p>
       </div>
     </div>
