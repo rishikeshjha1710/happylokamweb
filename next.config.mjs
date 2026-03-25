@@ -36,6 +36,8 @@ const securityHeaders = [
 if (trustworthyPublicOrigin) {
   securityHeaders.splice(4, 0, { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' });
   securityHeaders.splice(5, 0, { key: 'Cross-Origin-Resource-Policy', value: 'same-site' });
+} else {
+  securityHeaders.splice(4, 0, { key: 'Cross-Origin-Opener-Policy', value: 'unsafe-none' });
 }
 
 /** @type {import('next').NextConfig} */

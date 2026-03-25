@@ -11,11 +11,22 @@ const httpLink = new HttpLink({
   credentials: 'include'
 });
 
+function isHandledAuthError(message: string, code: unknown) {
+  return (
+    code === 'UNAUTHENTICATED' ||
+    code === 401 ||
+    message === 'Invalid credentials.' ||
+    message === 'Unauthorized' ||
+    message === 'User account is inactive.'
+  );
+}
+
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach((error) => {
-      if (error.extensions?.code === 'UNAUTHENTICATED' || error.extensions?.code === 401) {
+      if (isHandledAuthError(error.message, error.extensions?.code)) {
         clearSession();
+        return;
       }
 
       console.error('[GraphQL error]', error.message);
@@ -29,7 +40,10 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: ApolloLink.from([errorLink, httpLink])
+  link: ApolloLink.from([errorLink, httpLink]),
+  devtools: {
+    enabled: false
+  }
 });
 
 export function ApolloAppProvider({ children }: PropsWithChildren) {
