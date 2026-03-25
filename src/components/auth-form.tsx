@@ -112,7 +112,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       persistSession(payload.accessToken, payload.user.role);
       setSuccessDetails({
         title: 'Account Created!',
-        copy: 'Welcome to the Happy Lokam family. Your celebration journey starts now.'
+        copy: 'Welcome to the Happylokam family. Your celebration journey starts now.'
       });
 
       setTimeout(() => {
@@ -137,7 +137,7 @@ export function AuthForm({ mode }: AuthFormProps) {
             Checking your safe workspace.
           </h1>
           <p className="mt-4 max-w-xl text-sm leading-7 text-slate-600">
-            If you are already part of the Happy Lokam family, you will be redirected to your personal dashboard automatically.
+            If you are already part of the Happylokam family, you will be redirected to your personal dashboard automatically.
           </p>
         </div>
       </section>
@@ -189,7 +189,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                   : 'Create your celebration account.'}
             </h1>
             <p className="mt-8 max-w-2xl text-base leading-8 text-white/70">
-              Happy Lokam is the world&apos;s most trusted celebration network. From intimate gatherings to grand festivals, we bridge the gap between vision and execution.
+              Happylokam is the world&apos;s most trusted celebration network. From intimate gatherings to grand festivals, we bridge the gap between vision and execution.
             </p>
             <div className="mt-12 grid gap-4">
               {[

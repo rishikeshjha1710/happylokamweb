@@ -1,5 +1,9 @@
 const publicOrigin = process.env.NEXT_PUBLIC_SITE_ORIGIN?.trim();
 const internalApiOrigin = (process.env.INTERNAL_API_ORIGIN?.trim() || 'http://127.0.0.1:4000').replace(/\/+$/, '');
+const trustworthyPublicOrigin =
+  publicOrigin && (/^https:\/\//i.test(publicOrigin) || /^http:\/\/localhost(?::\d+)?$/i.test(publicOrigin))
+    ? publicOrigin
+    : null;
 
 const connectSources = ["'self'", 'https:'];
 if (publicOrigin) {
@@ -11,8 +15,6 @@ const securityHeaders = [
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'X-DNS-Prefetch-Control', value: 'on' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-  { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
-  { key: 'Cross-Origin-Resource-Policy', value: 'same-site' },
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
   {
     key: 'Content-Security-Policy',
@@ -30,6 +32,11 @@ const securityHeaders = [
     ].join('; ')
   }
 ];
+
+if (trustworthyPublicOrigin) {
+  securityHeaders.splice(4, 0, { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' });
+  securityHeaders.splice(5, 0, { key: 'Cross-Origin-Resource-Policy', value: 'same-site' });
+}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

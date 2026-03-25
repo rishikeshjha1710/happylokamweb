@@ -1,3 +1,3 @@
 # happylokamweb
 
-Frontend application for Happy Lokam built with Next.js.
+Frontend application for Happylokam built with Next.js.

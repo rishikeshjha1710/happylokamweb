@@ -95,7 +95,7 @@ export function ServiceDetailView({ slug }: { slug: string }) {
           <div className="panel sticky top-28">
             <p className="pill">Partner spotlight</p>
             <h2 className="mt-4 font-display text-3xl tracking-tight">{service.vendor.businessName}</h2>
-            <p className="mt-3 text-sm text-slate-600">{service.vendor.description ?? 'Verified partner on Happy Lokam.'}</p>
+            <p className="mt-3 text-sm text-slate-600">{service.vendor.description ?? 'Verified partner on Happylokam.'}</p>
             <div className="mt-6 grid gap-4">
               <div className="rounded-[24px] bg-rose-50 p-5">
                 <p className="text-xs uppercase tracking-[0.2em] text-rose-500">Location</p>

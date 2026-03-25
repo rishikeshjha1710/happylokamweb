@@ -1137,13 +1137,13 @@ export function PartnerServiceStudio({ showExistingServices = true }: { showExis
   }
 
   const termsContent = `
-Happy Lokam Partner Service Guidelines (2026):
+        Happylokam Partner Service Guidelines (2026):
 
 1. Accuracy: You must provide genuine information about your services and pricing.
 2. Legality: All services must comply with national regulations and MCA guidelines.
 3. Quality: Partners are expected to maintain professional standards for every booking.
 4. Transparency: Any additional charges must be disclosed upfront to the user.
-5. Protection: Happy Lokam protects both users and partners through verified protocols.
+        5. Protection: Happylokam protects both users and partners through verified protocols.
 
 By clicking 'Accept & Continue', you agree to these legal terms as updated by the Administrator.
   `;

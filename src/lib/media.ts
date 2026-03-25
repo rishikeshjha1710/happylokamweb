@@ -105,7 +105,7 @@ export function createEventPlaceholder(title: string, accent = '#e11d48') {
       <circle cx="980" cy="160" r="140" fill="rgba(255,255,255,0.12)" />
       <circle cx="170" cy="660" r="180" fill="rgba(255,255,255,0.1)" />
       <rect x="86" y="106" width="220" height="46" rx="23" fill="rgba(255,255,255,0.16)" />
-      <text x="110" y="136" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="3">HAPPY LOKAM</text>
+      <text x="110" y="136" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="3">HAPPYLOKAM</text>
       <text x="86" y="410" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="74" font-weight="700">${safeTitle}</text>
       <text x="86" y="470" fill="rgba(255,255,255,0.82)" font-family="Arial, Helvetica, sans-serif" font-size="26">Premium event booking experience</text>
     </svg>

@@ -245,7 +245,7 @@ export function SiteShell({ children }: PropsWithChildren) {
           </div>
           <div className="mt-20 border-t border-rose-50 pt-8 text-center sm:text-left">
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-slate-400">
-              &copy; 2026 Happy Lokam Pvt Ltd. Making Celebrations Beautiful.
+              &copy; 2026 Happylokam Pvt Ltd. Making Celebrations Beautiful.
             </p>
           </div>
         </div>

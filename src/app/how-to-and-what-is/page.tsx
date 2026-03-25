@@ -4,8 +4,8 @@ import { ArrowRight, HelpCircle, Sparkles, ShieldCheck, Heart, Zap, Star } from 
 export default function HowToWhatIsPage() {
   const faqs = [
     {
-      question: "What exactly is Happy Lokam?",
-      answer: "Imagine a world where your most important family moments are planned with the click of a button. Happy Lokam is that world. We are a premium bridge that connects families with the most trusted, elite celebration experts. Whether it's a grand wedding or an intimate birthday, we ensure the 'struggle' of planning is replaced by the 'joy' of celebrating."
+      question: "What exactly is Happylokam?",
+      answer: "Imagine a world where your most important family moments are planned with the click of a button. Happylokam is that world. We are a premium bridge that connects families with the most trusted, elite celebration experts. Whether it's a grand wedding or an intimate birthday, we ensure the 'struggle' of planning is replaced by the 'joy' of celebrating."
     },
     {
       question: "How do I start my celebration journey?",
@@ -13,15 +13,15 @@ export default function HowToWhatIsPage() {
     },
     {
       question: "Why should I trust the partners here?",
-      answer: "Every single partner on our platform is hand-picked and verified. We don't just 'list' businesses; we 'curate' excellence. From legal registration checks to quality audits, we do the hard work so you can have total peace of mind. When you book on Happy Lokam, you are booking a promise of perfection."
+      answer: "Every single partner on our platform is hand-picked and verified. We don't just 'list' businesses; we 'curate' excellence. From legal registration checks to quality audits, we do the hard work so you can have total peace of mind. When you book on Happylokam, you are booking a promise of perfection."
     },
     {
-      question: "What makes Happy Lokam different from others?",
+      question: "What makes Happylokam different from others?",
       answer: "Most platforms give you a list. We give you a life-changing experience. We use smart technology to ensure your bookings are confirmed instantly. We focus on 'Connection', not just 'Collection'. We believe celebration is a human right, and it should be beautiful, fast, and completely secure."
     },
     {
       question: "Is there a cost to join the family?",
-      answer: "Joining the Happy Lokam family is a gift we give to every user. Browsing, exploring, and planning is free. You only pay for the premium services you choose to bring your celebration to life. We believe in transparency, so every price you see is fair, honest, and filled with value."
+      answer: "Joining the Happylokam family is a gift we give to every user. Browsing, exploring, and planning is free. You only pay for the premium services you choose to bring your celebration to life. We believe in transparency, so every price you see is fair, honest, and filled with value."
     }
   ];
 
@@ -43,7 +43,7 @@ export default function HowToWhatIsPage() {
             The Art of <span className="text-rose-600">Celebration.</span>
           </h1>
           <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-white/70">
-            You have questions. We have the answers that lead to joy. Discover how Happy Lokam is redefining the way the world celebrates life's most beautiful milestones.
+            You have questions. We have the answers that lead to joy. Discover how Happylokam is redefining the way the world celebrates life's most beautiful milestones.
           </p>
         </div>
       </section>
@@ -94,7 +94,7 @@ export default function HowToWhatIsPage() {
           <div className="grid gap-6">
             <div className="panel bg-rose-50 border-rose-100 p-8 md:p-12">
                <HelpCircle className="h-10 w-10 text-rose-600" />
-               <h3 className="mt-6 font-display text-3xl text-slate-950">Why Happy Lokam?</h3>
+               <h3 className="mt-6 font-display text-3xl text-slate-950">Why Happylokam?</h3>
                <p className="mt-4 text-slate-600 leading-8">
                  Because your family's happiness is too precious to leave to chance. We believe that festivals and functions are the soul of our culture. By providing a safe, verified, and premium platform, we protect that soul. 
                  <br/><br/>
