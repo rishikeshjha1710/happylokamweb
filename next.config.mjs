@@ -1,3 +1,11 @@
+const publicOrigin = process.env.NEXT_PUBLIC_SITE_ORIGIN?.trim();
+const internalApiOrigin = (process.env.INTERNAL_API_ORIGIN?.trim() || 'http://127.0.0.1:4000').replace(/\/+$/, '');
+
+const connectSources = ["'self'", 'https:'];
+if (publicOrigin) {
+  connectSources.push(publicOrigin);
+}
+
 const securityHeaders = [
   { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
@@ -8,8 +16,18 @@ const securityHeaders = [
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
   {
     key: 'Content-Security-Policy',
-    value:
-      "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' https://checkout.razorpay.com; style-src 'self' 'unsafe-inline'; connect-src 'self' http://localhost:4000 http://127.0.0.1:4000 https:; frame-src https://api.razorpay.com https://checkout.razorpay.com;"
+    value: [
+      "default-src 'self'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "frame-ancestors 'self'",
+      "object-src 'none'",
+      "img-src 'self' data: https:",
+      "script-src 'self' 'unsafe-inline' https://checkout.razorpay.com",
+      "style-src 'self' 'unsafe-inline'",
+      `connect-src ${Array.from(new Set(connectSources)).join(' ')}`,
+      "frame-src https://api.razorpay.com https://checkout.razorpay.com"
+    ].join('; ')
   }
 ];
 
@@ -28,6 +46,14 @@ const nextConfig = {
         hostname: 'images.unsplash.com'
       }
     ]
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${internalApiOrigin}/:path*`
+      }
+    ];
   },
   async headers() {
     return [

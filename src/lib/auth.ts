@@ -1,4 +1,5 @@
 import { ROLE_COOKIE_KEY } from './auth-constants';
+import { getGraphqlEndpoint } from './runtime-config';
 
 export type SessionRole = 'USER' | 'PARTNER' | 'ADMIN';
 const SESSION_COOKIE_MAX_AGE_SECONDS = 15 * 60;
@@ -86,7 +87,7 @@ export function readStoredSession() {
 
 export async function logoutSession() {
   try {
-    await fetch(process.env.NEXT_PUBLIC_GRAPHQL_URL ?? 'http://localhost:4000/graphql', {
+    await fetch(getGraphqlEndpoint(), {
       method: 'POST',
       credentials: 'include',
       headers: {

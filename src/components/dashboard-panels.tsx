@@ -38,6 +38,7 @@ import {
   TrendChart,
   Skeleton
 } from './dashboard-primitives';
+import { getHealthEndpoint } from '@/lib/runtime-config';
 import {
   AdminCmsManager,
   AdminBookingsManager,
@@ -451,8 +452,7 @@ function AdminHealthPanel({
 
     async function loadHealth() {
       try {
-        const healthUrl = (process.env.NEXT_PUBLIC_GRAPHQL_URL ?? 'http://localhost:4000/graphql').replace(/\/graphql$/, '/health');
-        const response = await fetch(healthUrl, {
+        const response = await fetch(getHealthEndpoint(), {
           credentials: 'include',
           cache: 'no-store'
         });

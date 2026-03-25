@@ -4,9 +4,10 @@ import { ApolloClient, ApolloLink, ApolloProvider, HttpLink, InMemoryCache } fro
 import { onError } from '@apollo/client/link/error';
 import { PropsWithChildren } from 'react';
 import { clearSession } from './auth';
+import { getGraphqlEndpoint } from './runtime-config';
 
 const httpLink = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_URL ?? 'http://localhost:4000/graphql',
+  uri: getGraphqlEndpoint(),
   credentials: 'include'
 });
 
