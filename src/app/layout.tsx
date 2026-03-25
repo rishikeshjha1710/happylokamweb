@@ -17,14 +17,14 @@ const displayFont = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Happy Lokam ',
-    template: '%s | Happy Lokam '
+    default: 'Happylokam',
+    template: '%s | Happylokam'
   },
   description: 'Premium event booking platform for users, vendors, and admins with secure bookings, polished dashboards, and commerce-ready operations.',
-  applicationName: 'Happy Lokam ',
-  keywords: ['event booking platform', 'vendor marketplace', 'wedding planning', 'event services', 'Happy Lokam'],
+  applicationName: 'Happylokam',
+  keywords: ['event booking platform', 'vendor marketplace', 'wedding planning', 'event services', 'Happylokam'],
   openGraph: {
-    title: 'Happy Lokam ',
+    title: 'Happylokam',
     description: 'Secure event discovery, booking, vendor operations, and admin control in one premium platform.',
     type: 'website'
   }

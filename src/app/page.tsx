@@ -1,5 +1,6 @@
+import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, CalendarRange, LayoutDashboard, ShieldCheck, Sparkles, Wallet, Star, Play, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, CalendarRange, LayoutDashboard, ShieldCheck, Sparkles, Star, CheckCircle2 } from 'lucide-react';
 import { PublicServiceGrid } from '@/components/public-service-grid';
 
 const roleJourneys = [
@@ -8,21 +9,21 @@ const roleJourneys = [
     copy: 'Find the perfect setting and services for your special day. We make the struggle of searching and booking a thing of the past.',
     href: '/signup?role=USER',
     action: 'Plan your celebration',
-    accent: 'bg-rose-50'
+    accent: 'bg-[linear-gradient(180deg,#fff1f2,#ffe4e6)]'
   },
   {
     title: 'Partners',
     copy: 'Grow your business by showcasing your amazing services to families and organizers looking for quality and trust.',
     href: '/signup?role=VENDOR',
     action: 'Become a partner',
-    accent: 'bg-amber-50'
+    accent: 'bg-[linear-gradient(180deg,#fff1f2,#ffe4e6)]'
   },
   {
     title: 'Community',
     copy: 'We ensure every booking is handled with care, providing a safe and joyful environment for everyone involved.',
     href: '/login?role=USER',
     action: 'Help center',
-    accent: 'bg-slate-50'
+    accent: 'bg-[linear-gradient(180deg,#fff7f8,#fff1f2)]'
   }
 ];
 
@@ -57,10 +58,13 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-slate-950 pb-20 pt-28 md:pb-32 md:pt-40">
         <div className="absolute inset-0 z-0">
-          <img 
-            src="/hero.png" 
-            alt="Celebration Hero" 
-            className="h-full w-full object-cover opacity-30 blur-[2px]"
+          <Image
+            src="/hero.png"
+            alt="Celebration Hero"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-30 blur-[2px]"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/40 to-slate-950" />
         </div>
@@ -130,22 +134,30 @@ export default function HomePage() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="mx-auto max-w-7xl px-6 py-24 lg:py-32">
+      <section
+        id="about"
+        className="bg-[radial-gradient(circle_at_top,#ffe4e6,transparent_48%),linear-gradient(180deg,#fff7f8,#ffffff)] py-24 lg:py-32"
+      >
+        <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-16 lg:grid-cols-[1fr_0.8fr] lg:items-center">
           <div>
-            <span className="pill">About Our Mission</span>
+            <span className="pill border-rose-200 bg-white text-rose-700">About Our Mission</span>
             <h2 className="mt-6 font-display text-4xl tracking-tight text-slate-950 md:text-6xl">
               Helping You Celebrate <span className="text-rose-600">Freedom.</span>
             </h2>
             <p className="mt-6 text-lg leading-8 text-slate-600">
-              At Happy Lokam, our mission is to ensure that no family struggles to plan their moments of joy. We believe that festivals and family functions are for making memories, not managing stress. 
-              <br/><br/>
-              By connecting you with **Verified Partners**, we guarantee quality and reliability for every event.
+              At Happylokam, our mission is to ensure that no family struggles to plan their moments of joy. We believe that festivals and family functions are for making memories, not managing stress.
+            </p>
+            <p className="mt-4 text-lg leading-8 text-slate-600">
+              By connecting you with <strong className="font-semibold text-rose-700">verified partners</strong>, we guarantee quality, speed, and reliability for every event you plan on the platform.
             </p>
             
             <div className="mt-10 grid gap-6 md:grid-cols-2">
               {platformPillars.map((pillar) => (
-                <div key={pillar.title} className="panel bg-white p-6 transition hover:shadow-xl">
+                <div
+                  key={pillar.title}
+                  className="rounded-[30px] border border-rose-100 bg-white p-6 shadow-[0_24px_70px_rgba(225,29,72,0.08)] transition hover:-translate-y-1 hover:shadow-[0_26px_90px_rgba(225,29,72,0.14)]"
+                >
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-50 text-rose-600">
                     <pillar.icon className="h-5 w-5" />
                   </div>
@@ -157,9 +169,11 @@ export default function HomePage() {
           </div>
 
           <div className="relative">
-            <div className="absolute -inset-1 rounded-[40px] bg-gradient-to-tr from-rose-500 to-amber-500 opacity-20 blur-2xl" />
-            <div className="relative overflow-hidden rounded-[36px] bg-white p-8 shadow-2xl">
-              <img src="/hero.png" alt="Celebration" className="rounded-2xl h-80 w-full object-cover" />
+            <div className="absolute -inset-1 rounded-[40px] bg-gradient-to-tr from-rose-500 to-rose-200 opacity-30 blur-2xl" />
+            <div className="relative overflow-hidden rounded-[36px] border border-rose-100 bg-white p-8 shadow-[0_28px_90px_rgba(225,29,72,0.12)]">
+              <div className="relative h-80 overflow-hidden rounded-2xl">
+                <Image src="/hero.png" alt="Celebration" fill sizes="(min-width: 1024px) 40rem, 100vw" className="object-cover" />
+              </div>
               <div className="mt-8 space-y-4">
                 <div className="flex items-center gap-3 text-slate-900">
                   <CheckCircle2 className="h-5 w-5 text-rose-600" />
@@ -177,15 +191,16 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+        </div>
       </section>
 
       {/* Legal & Trust Section */}
-      <section className="bg-slate-50 border-y border-slate-200 py-24">
+      <section className="border-y border-rose-100 bg-[linear-gradient(180deg,#fff1f2,#fff7f8)] py-24">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
             <div className="order-2 lg:order-1">
-              <div className="relative aspect-video overflow-hidden rounded-[40px] shadow-2xl">
-                 <div className="absolute inset-0 bg-slate-900 flex items-center justify-center p-8 text-center text-white">
+              <div className="relative aspect-video overflow-hidden rounded-[40px] shadow-[0_28px_80px_rgba(225,29,72,0.14)]">
+                 <div className="absolute inset-0 flex items-center justify-center bg-[linear-gradient(135deg,#500724,#881337)] p-8 text-center text-white">
                     <div>
                         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-600">
                             <ShieldCheck className="h-8 w-8" />
@@ -197,12 +212,12 @@ export default function HomePage() {
               </div>
             </div>
             <div className="order-1 lg:order-2">
-              <span className="pill">Legal & Trust</span>
+              <span className="pill border-rose-200 bg-white text-rose-700">Legal & Trust</span>
               <h2 className="mt-6 font-display text-4xl tracking-tight text-slate-950 md:text-5xl">
                 A Registered & <span className="text-rose-600">Verified</span> Company.
               </h2>
               <p className="mt-6 text-lg leading-8 text-slate-600">
-                Happy Lokam is a legally working entity, registered in the year **2026** and **Verified by MCA**. We pride ourselves on transparency and legal integrity.
+                Happylokam is a legally working entity, registered in the year <strong className="font-semibold text-slate-900">2026</strong> and <strong className="font-semibold text-rose-700">verified by MCA</strong>. We pride ourselves on transparency and legal integrity.
               </p>
               <div className="mt-8 flex items-start gap-4 rounded-3xl border border-rose-100 bg-white p-6 shadow-sm">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-rose-50 text-rose-600">
@@ -219,10 +234,10 @@ export default function HomePage() {
       </section>
 
       {/* Role Journeys */}
-      <section id="journeys" className="py-24 md:py-32">
+      <section id="journeys" className="bg-[linear-gradient(180deg,#ffffff,#fff7f8)] py-24 md:py-32">
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center">
-            <span className="pill">Experience</span>
+            <span className="pill border-rose-200 bg-white text-rose-700">Experience</span>
             <h2 className="mt-5 font-display text-4xl tracking-tight text-slate-950 md:text-5xl">
               Everyone is <span className="text-rose-600">Welcome.</span>
             </h2>
@@ -230,7 +245,10 @@ export default function HomePage() {
 
           <div className="mt-16 grid gap-8 lg:grid-cols-3">
             {roleJourneys.map((journey) => (
-              <div key={journey.title} className={`panel group transition-all hover:-translate-y-2 hover:shadow-2xl ${journey.accent}`}>
+              <div
+                key={journey.title}
+                className={`group rounded-[32px] border border-rose-100 p-8 shadow-[0_22px_70px_rgba(225,29,72,0.08)] transition-all hover:-translate-y-2 hover:shadow-[0_30px_100px_rgba(225,29,72,0.14)] ${journey.accent}`}
+              >
                 <p className="text-xs font-bold uppercase tracking-[0.24em] text-rose-500">{journey.title}</p>
                 <h3 className="mt-6 font-display text-3xl tracking-tight text-slate-950">{journey.title} Hub</h3>
                 <p className="mt-4 text-base leading-7 text-slate-600">{journey.copy}</p>
@@ -245,10 +263,10 @@ export default function HomePage() {
       </section>
 
       {/* Past Celebrations Section */}
-      <section className="bg-white py-24 lg:py-32">
+      <section className="bg-[#fff7f8] py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center mb-16">
-            <span className="pill">Heritage</span>
+            <span className="pill border-rose-200 bg-white text-rose-700">Heritage</span>
             <h2 className="mt-5 font-display text-4xl tracking-tight text-slate-950 md:text-5xl">
               Our Past <span className="text-rose-600">Celebrations.</span>
             </h2>
@@ -279,7 +297,13 @@ export default function HomePage() {
               }
             ].map((item, i) => (
               <div key={i} className="group relative overflow-hidden rounded-[32px] bg-slate-100 aspect-[4/5] shadow-xl hover:shadow-2xl transition-all duration-500">
-                <img src={item.image} alt={item.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  sizes="(min-width: 1024px) 24rem, (min-width: 768px) 50vw, 100vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                   <span className="inline-block rounded-full bg-rose-600/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-rose-400 backdrop-blur-md">
@@ -295,7 +319,7 @@ export default function HomePage() {
       </section>
 
       {/* Masterpiece Gallery Section */}
-      <section className="bg-slate-950 py-24 lg:py-32 overflow-hidden">
+      <section className="overflow-hidden bg-[linear-gradient(180deg,#3f0016,#020617)] py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
             <div className="max-w-2xl">
@@ -315,7 +339,7 @@ export default function HomePage() {
 
           <div className="grid gap-6 md:grid-cols-4 lg:grid-cols-4 aspect-[16/9] md:aspect-auto">
              <div className="md:col-span-2 md:row-span-2 relative overflow-hidden rounded-[40px] group">
-                <img src="/wedding-gallery.png" alt="Premium Service" className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                <Image src="/wedding-gallery.png" alt="Premium Service" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover transition-transform duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition-colors" />
                 <div className="absolute inset-0 p-10 flex flex-col justify-end">
                    <h3 className="font-display text-3xl text-white">Elite Wedding Planning</h3>
@@ -323,21 +347,21 @@ export default function HomePage() {
                 </div>
              </div>
              <div className="relative overflow-hidden rounded-[32px] group aspect-square">
-                <img src="/corporate-gallery.png" alt="Corporate" className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                <Image src="/corporate-gallery.png" alt="Corporate" fill sizes="(min-width: 1024px) 24rem, 50vw" className="object-cover transition-transform duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition-colors" />
                 <div className="absolute inset-0 p-6 flex flex-col justify-end">
                    <h3 className="font-display text-xl text-white">Corporate Excellence</h3>
                 </div>
              </div>
              <div className="relative overflow-hidden rounded-[32px] group aspect-square">
-                <img src="/hero.png" alt="Catering" className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                <Image src="/hero.png" alt="Catering" fill sizes="(min-width: 1024px) 24rem, 50vw" className="object-cover transition-transform duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition-colors" />
                 <div className="absolute inset-0 p-6 flex flex-col justify-end">
                    <h3 className="font-display text-xl text-white">Gourmet Catering</h3>
                 </div>
              </div>
              <div className="md:col-span-2 relative overflow-hidden rounded-[32px] group h-64 md:h-auto">
-                <img src="/hero.png" alt="Decor" className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                <Image src="/hero.png" alt="Decor" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover transition-transform duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition-colors" />
                 <div className="absolute inset-0 p-8 flex flex-col justify-end">
                    <h3 className="font-display text-2xl text-white">Bespoke Floral Decor</h3>
@@ -348,9 +372,9 @@ export default function HomePage() {
       </section>
 
       {/* Explore Grid Preview (Legacy fallback) */}
-      <section className="py-24 bg-slate-50">
+      <section id="platform" className="bg-[linear-gradient(180deg,#fff1f2,#fff7f8)] py-24">
         <div className="mx-auto max-w-7xl px-6 text-center mb-12">
-          <span className="pill">Quick Browse</span>
+          <span className="pill border-rose-200 bg-white text-rose-700">Quick Browse</span>
           <h2 className="mt-5 font-display text-4xl tracking-tight text-slate-950 md:text-5xl">
             Live <span className="text-rose-600">Marketplace</span> Feed.
           </h2>

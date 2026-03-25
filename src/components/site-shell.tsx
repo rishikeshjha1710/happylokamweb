@@ -1,11 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { getDashboardPathForRole, logoutSession, readStoredSession, SessionRole } from '@/lib/auth';
-import { ArrowUpRight, Github, Instagram, ShieldCheck, Store, Twitter, UserCircle } from 'lucide-react';
+import { Github, Instagram, ShieldCheck, Store, Twitter, UserCircle } from 'lucide-react';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -25,6 +24,20 @@ const socialLinks = [
   { href: 'https://www.instagram.com', label: 'Open Instagram', icon: Instagram },
   { href: 'https://github.com', label: 'Open GitHub', icon: Github }
 ] as const;
+
+function BrandMark({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#fb7185,#be123c)] text-sm font-black uppercase tracking-[0.2em] text-white shadow-[0_12px_35px_rgba(225,29,72,0.28)]">
+        HL
+      </div>
+      <div className={compact ? '' : 'hidden sm:block'}>
+        <p className="font-display text-xl font-black tracking-tight text-slate-950">Happylokam</p>
+        <p className="text-[10px] font-bold uppercase tracking-[0.38em] text-rose-600">Premium Event Network</p>
+      </div>
+    </div>
+  );
+}
 
 function getExploreHref(role: SessionRole | null) {
   if (role === 'USER') {
@@ -51,23 +64,52 @@ export function SiteShell({ children }: PropsWithChildren) {
   useEffect(() => {
     const session = readStoredSession();
     setRole(session.role);
-    setCurrentTab(typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('tab'));
+    if (typeof window !== 'undefined') {
+      setCurrentTab(new URLSearchParams(window.location.search).get('tab'));
+    }
   }, [pathname]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+
+    const syncTab = () => setCurrentTab(new URLSearchParams(window.location.search).get('tab'));
+    const navigationEvent = 'happylokam:navigation';
+    const originalPushState = window.history.pushState.bind(window.history);
+    const originalReplaceState = window.history.replaceState.bind(window.history);
+
+    window.history.pushState = function pushState(...args) {
+      originalPushState(...args);
+      window.dispatchEvent(new Event(navigationEvent));
+    };
+
+    window.history.replaceState = function replaceState(...args) {
+      originalReplaceState(...args);
+      window.dispatchEvent(new Event(navigationEvent));
+    };
+
+    window.addEventListener('popstate', syncTab);
+    window.addEventListener(navigationEvent, syncTab);
+    syncTab();
+
+    return () => {
+      window.history.pushState = originalPushState;
+      window.history.replaceState = originalReplaceState;
+      window.removeEventListener('popstate', syncTab);
+      window.removeEventListener(navigationEvent, syncTab);
+    };
+  }, []);
+
   const workspaceHref = getDashboardPathForRole(role);
+  const exploreHref = getExploreHref(role);
 
   return (
     <div className="min-h-screen bg-[#fffcfd] text-slate-900 selection:bg-rose-100 selection:text-rose-900">
       <header className="sticky top-0 z-50 w-full border-b border-rose-100/50 bg-white/70 backdrop-blur-xl">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
           <Link href="/" className="group flex items-center gap-3">
-            <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-rose-100 bg-white shadow-[0_8px_30px_rgba(225,29,72,0.22)] transition-transform group-hover:scale-105">
-              <Image src="/logo.jpg" alt="Happy Lokam logo" fill sizes="48px" className="object-cover" />
-            </div>
-            <div className="hidden sm:block">
-              <p className="font-display text-xl font-bold tracking-tight text-slate-950">Happy Lokam</p>
-              <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-rose-500">Premium Marketplace</p>
-            </div>
+            <BrandMark />
           </Link>
 
           <nav className="hidden items-center gap-2 lg:flex">
@@ -115,7 +157,6 @@ export function SiteShell({ children }: PropsWithChildren) {
                         <Icon className="h-5 w-5" />
                       </div>
                       <div className="hidden flex-col text-left md:flex">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-rose-600"></span>
                         <span className="text-sm font-bold text-slate-900">{action.label}</span>
                       </div>
                     </Link>
@@ -160,10 +201,7 @@ export function SiteShell({ children }: PropsWithChildren) {
           <div className="grid gap-12 lg:grid-cols-4 lg:gap-8">
             <div className="col-span-2">
               <Link href="/" className="flex items-center gap-3">
-                <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-rose-100 bg-white">
-                  <Image src="/logo.jpg" alt="Happy Lokam logo" fill sizes="40px" className="object-cover" />
-                </div>
-                <p className="font-display text-2xl font-bold tracking-tight">Happy Lokam</p>
+                <BrandMark compact />
               </Link>
               <p className="mt-6 max-w-md text-base leading-8 text-slate-600">
                 Celebration is a fundamental human joy. We exist to ensure that every family can celebrate their milestones without the struggle of complex planning and slow bookings.
@@ -187,21 +225,21 @@ export function SiteShell({ children }: PropsWithChildren) {
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.2em] text-rose-500">Plan</p>
               <ul className="mt-6 space-y-4 text-sm font-medium text-slate-600">
-                <li><Link href="/explore" className="hover:text-rose-600">Explore Services</Link></li>
+                <li><Link href={exploreHref} className="hover:text-rose-600">Explore Services</Link></li>
                 <li><Link href="/signup?role=USER" className="hover:text-rose-600">User Signup</Link></li>
                 <li><Link href="/login?role=USER" className="hover:text-rose-600">User Login</Link></li>
                 <li><Link href="/#about" className="hover:text-rose-600">About Our Mission</Link></li>
+                <li><Link href="/#platform" className="hover:text-rose-600">Platform Highlights</Link></li>
               </ul>
             </div>
 
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.2em] text-rose-500">Account</p>
               <ul className="mt-6 space-y-4 text-sm font-medium text-slate-600">
-               
                 <li className="pt-2"><div className="h-px bg-rose-50" /></li>
-                <li><Link href="/signup?role=PARTNER" className="hover:text-rose-600">Partner Opportunities</Link></li>
+                <li><Link href="/signup?role=PARTNER" className="hover:text-rose-600">Partner Signup</Link></li>
                 <li><Link href="/login?role=PARTNER" className="hover:text-rose-600">Partner Login</Link></li>
-                <li><Link href="/login?role=ADMIN" className="hover:text-rose-600 font-bold">Admin Headquarters</Link></li>
+                <li><Link href="/login?role=ADMIN" className="font-bold hover:text-rose-600">Admin Login</Link></li>
               </ul>
             </div>
           </div>
