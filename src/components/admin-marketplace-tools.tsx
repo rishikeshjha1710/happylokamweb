@@ -14,6 +14,7 @@ import {
   CREATE_VENDOR_ACCOUNT_MUTATION,
   SERVICE_CATEGORIES_QUERY
 } from '@/graphql/queries';
+import { fileToDataUrl } from '@/lib/media';
 import { MarketplaceImage } from './marketplace-image';
 import { PremiumAlert } from './dashboard-primitives';
 
@@ -105,6 +106,42 @@ function ImagePreview({ title, imageUrl }: { title: string; imageUrl?: string | 
       />
     </div>
   );
+}
+
+function validateAdminServiceInput({
+  title,
+  summary,
+  description,
+  priceFrom,
+  city
+}: {
+  title: string;
+  summary: string;
+  description: string;
+  priceFrom: string;
+  city: string;
+}) {
+  if (title.trim().length < 3) {
+    return 'Service title must be at least 3 characters.';
+  }
+
+  if (summary.trim().length < 20) {
+    return 'Service summary must be at least 20 characters.';
+  }
+
+  if (description.trim().length < 40) {
+    return 'Service description must be at least 40 characters.';
+  }
+
+  if (!priceFrom || Number(priceFrom) < 1) {
+    return 'Please enter a valid starting price.';
+  }
+
+  if (!city.trim()) {
+    return 'Please enter the operating city.';
+  }
+
+  return null;
 }
 
 function ToolSection({ eyebrow, title, copy }: { eyebrow: string; title: string; copy: string }) {
@@ -381,8 +418,38 @@ export function AdminServicesManager() {
     });
   }
 
+  async function handleCoverUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    try {
+      const image = await fileToDataUrl(file);
+      setForm((current) => ({ ...current, coverImageUrl: image }));
+      setMessage('Cover image selected successfully.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Image upload failed.');
+    } finally {
+      event.target.value = '';
+    }
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    const validationError = validateAdminServiceInput({
+      title: form.title,
+      summary: form.summary,
+      description: form.description,
+      priceFrom: form.priceFrom,
+      city: form.city
+    });
+
+    if (validationError) {
+      setMessage(validationError);
+      return;
+    }
 
     const payload = {
       title: form.title,
@@ -581,12 +648,24 @@ export function AdminServicesManager() {
               placeholder="Guest capacity"
               className="rounded-2xl border border-slate-200 px-4 py-3 text-sm"
             />
-            <input
-              value={form.coverImageUrl}
-              onChange={(event) => setForm((current) => ({ ...current, coverImageUrl: event.target.value }))}
-              placeholder="Cover image URL"
-              className="rounded-2xl border border-slate-200 px-4 py-3 text-sm md:col-span-2"
-            />
+            <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm md:col-span-2">
+              <label className="text-xs font-semibold uppercase tracking-[0.24em] text-rose-700">Cover image upload</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleCoverUpload}
+                className="mt-3 block w-full text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-rose-50 file:px-4 file:py-2 file:font-semibold file:text-rose-700"
+              />
+              {form.coverImageUrl ? (
+                <button
+                  type="button"
+                  onClick={() => setForm((current) => ({ ...current, coverImageUrl: '' }))}
+                  className="mt-3 rounded-full border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-700"
+                >
+                  Remove cover image
+                </button>
+              ) : null}
+            </div>
             <button
               type="submit"
               disabled={createState.loading || updateState.loading}

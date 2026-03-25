@@ -20,6 +20,7 @@ import {
   History,
   MessageSquareQuote,
   Activity,
+  PlusSquare,
   Menu,
   X,
   ChevronLeft,
@@ -46,13 +47,16 @@ const adminLinks: SidebarLink[] = [
 ];
 
 const vendorLinks: SidebarLink[] = [
-  { label: 'Dashboard', href: '/dashboard/vendor', icon: LayoutDashboard },
-  { label: 'Partner Studio', href: '/dashboard/vendor?tab=services', icon: PackageCheck },
-  { label: 'Order Pipeline', href: '/dashboard/vendor?tab=bookings', icon: CalendarDays },
-  { label: 'Availability', href: '/dashboard/vendor?tab=availability', icon: History },
-  { label: 'Earnings', href: '/dashboard/vendor?tab=payouts', icon: CreditCard },
-  { label: 'Review Center', href: '/dashboard/vendor?tab=reviews', icon: MessageSquareQuote },
-  { label: 'Expert Profile', href: '/dashboard/vendor?tab=profile', icon: Store }
+  { label: 'Dashboard', href: '/dashboard/partner', icon: LayoutDashboard },
+  { label: 'Analytics', href: '/dashboard/partner?tab=analytics', icon: Activity },
+  { label: 'Add Services', href: '/dashboard/partner?tab=add-service', icon: PlusSquare },
+  { label: 'Manage Services', href: '/dashboard/partner?tab=manage-services', icon: PackageCheck },
+  { label: 'Orders', href: '/dashboard/partner?tab=orders', icon: CalendarDays },
+  { label: 'History', href: '/dashboard/partner?tab=history', icon: History },
+  { label: 'Availability', href: '/dashboard/partner?tab=availability', icon: ClipboardList },
+  { label: 'Earnings', href: '/dashboard/partner?tab=earnings', icon: CreditCard },
+  { label: 'Review Center', href: '/dashboard/partner?tab=reviews', icon: MessageSquareQuote },
+  { label: 'Profile', href: '/dashboard/partner?tab=profile', icon: Store }
 ];
 
 const userLinks: SidebarLink[] = [
@@ -74,7 +78,17 @@ export function DashboardSidebar({ role, fullName }: DashboardSidebarProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(false);
   const links = role === 'ADMIN' ? adminLinks : role === 'PARTNER' ? vendorLinks : userLinks;
-  const currentTab = searchParams.get('tab');
+  const rawCurrentTab = searchParams.get('tab');
+  const currentTab =
+    role === 'PARTNER'
+      ? rawCurrentTab === 'services'
+        ? 'manage-services'
+        : rawCurrentTab === 'bookings'
+          ? 'orders'
+          : rawCurrentTab === 'payouts'
+            ? 'earnings'
+            : rawCurrentTab
+      : rawCurrentTab;
   const panelLabel = role === 'ADMIN' ? 'Admin Panel' : role === 'PARTNER' ? 'Partner Panel' : 'User Panel';
   const panelSubtitle = role === 'ADMIN' ? 'Protected operations' : role === 'PARTNER' ? 'Business workspace' : 'Personal workspace';
 

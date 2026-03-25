@@ -814,7 +814,15 @@ export function UserDashboardView() {
 
 export function PartnerDashboardView() {
   const searchParams = useSearchParams();
-  const activeTab = searchParams.get('tab') || 'overview';
+  const requestedTab = searchParams.get('tab') || 'overview';
+  const activeTab =
+    requestedTab === 'services'
+      ? 'manage-services'
+      : requestedTab === 'bookings'
+        ? 'orders'
+        : requestedTab === 'payouts'
+          ? 'earnings'
+          : requestedTab;
   
   const { data: profileData, loading: profileLoading, error: profileError } = useQuery(MY_VENDOR_PROFILE_QUERY);
   const { data: serviceData, loading: serviceLoading, error: serviceError } = useQuery(MY_VENDOR_SERVICES_QUERY);
@@ -852,6 +860,8 @@ export function PartnerDashboardView() {
   const averageOrderValue = paidOrders.length ? grossRevenue / paidOrders.length : 0;
   const publishedServices = scopedServices.filter((service) => service.status === 'PUBLISHED');
   const payoutPending = paidOrders.filter((booking) => booking.payment?.payoutStatus === 'PENDING');
+  const settledPayouts = paidOrders.filter((booking) => booking.payment?.payoutStatus === 'PAID');
+  const closedBookings = bookings.filter((booking) => ['COMPLETED', 'CANCELLED', 'REJECTED'].includes(booking.status));
   const bookingTrend = monthSeries(scopedBookings.map((booking) => booking.createdAt));
   const partnerRevenueTrend = monthlyValueSeries(
     paidOrders,
@@ -876,8 +886,18 @@ export function PartnerDashboardView() {
     'PUBLISHED',
     'ARCHIVED'
   ]);
+  const approvalStatusItems = groupCounts(
+    scopedServices.map((service) => service.approvalStatus),
+    {
+      PENDING: '#f59e0b',
+      APPROVED: '#10b981',
+      REJECTED: '#ef4444'
+    },
+    ['PENDING', 'APPROVED', 'REJECTED']
+  );
   const filteredBookings = filterBookings(bookings, bookingFilter);
   const visibleServices = services.filter((service) => serviceFilter === 'ALL' || service.status === serviceFilter);
+  const visibleHistory = [...closedBookings].sort((left, right) => new Date(right.updatedAt).getTime() - new Date(left.updatedAt).getTime());
   const topServices = [...scopedServices]
     .map((service) => {
       const relatedBookings = scopedBookings.filter((booking) => booking.service.id === service.id);
@@ -898,6 +918,16 @@ export function PartnerDashboardView() {
     meta: `${booking.user?.fullName ?? 'User'} • ${new Date(booking.eventDate).toLocaleDateString('en-IN')} • ${formatCurrency(booking.totalAmount)}`,
     badge: booking.status
   }));
+  const historyTimeline = visibleHistory.slice(0, 8).map((booking) => ({
+    id: booking.id,
+    title: `${booking.service.title} • ${booking.user?.fullName ?? 'User'}`,
+    meta: `${new Date(booking.updatedAt).toLocaleDateString('en-IN')} • ${booking.venue} • ${formatCurrency(booking.totalAmount)}`,
+    badge: booking.status
+  }));
+  const serviceCityDemand = cityCounts(scopedServices.map((service) => ({ city: service.city })));
+  const completionRate = safePercent(scopedBookings.filter((booking) => booking.status === 'COMPLETED').length, scopedBookings.length);
+  const paymentConversionRate = safePercent(paidOrders.length, scopedBookings.length);
+  const reviewCoverageRate = safePercent(scopedServices.filter((service) => service.totalReviews > 0).length, scopedServices.length);
 
   if (profileLoading || serviceLoading || bookingLoading) {
     return <DashboardOverviewSkeleton />;
@@ -1038,13 +1068,117 @@ export function PartnerDashboardView() {
               </div>
             </InsightPanel>
           </div>
+
+          <InsightPanel
+            eyebrow="Partner shortcuts"
+            title="Move quickly between operations, creation, and follow-up."
+            copy="Each action opens a live workspace connected to your actual services, bookings, payouts, and partner profile."
+          >
+            <div className="grid gap-4 md:grid-cols-3">
+              <Link href="/dashboard/partner?tab=add-service" className="rounded-[24px] border border-slate-200 bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+                <p className="text-sm font-semibold text-slate-900">Add a new service</p>
+                <p className="mt-2 text-sm text-slate-600">Create and publish a fresh listing into your partner catalog.</p>
+              </Link>
+              <Link href="/dashboard/partner?tab=manage-services" className="rounded-[24px] border border-slate-200 bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+                <p className="text-sm font-semibold text-slate-900">Manage live inventory</p>
+                <p className="mt-2 text-sm text-slate-600">Update pricing, summaries, publish state, and archived listings from the database.</p>
+              </Link>
+              <Link href="/dashboard/partner?tab=orders" className="rounded-[24px] border border-slate-200 bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+                <p className="text-sm font-semibold text-slate-900">Open order manager</p>
+                <p className="mt-2 text-sm text-slate-600">Review active bookings, update statuses, and handle execution without leaving the panel.</p>
+              </Link>
+            </div>
+          </InsightPanel>
         </>
       )}
 
-      {activeTab === 'services' && (
+      {activeTab === 'analytics' && (
         <div className="space-y-8">
-          <PartnerServiceStudio />
-          <InsightPanel eyebrow="Service lineup" title="Review your inventory.">
+          <div className="grid gap-4 xl:grid-cols-4">
+            <MetricCard
+              label="Completion rate"
+              value={`${completionRate}%`}
+              hint="Share of booking history that has successfully reached completion."
+              accent="bg-emerald-100 text-emerald-700"
+              icon={<BadgeIndianRupee className="h-6 w-6" />}
+            />
+            <MetricCard
+              label="Payment conversion"
+              value={`${paymentConversionRate}%`}
+              hint="Paid booking share compared with all booking activity in your panel."
+              accent="bg-sky-100 text-sky-700"
+              icon={<ClipboardList className="h-6 w-6" />}
+            />
+            <MetricCard
+              label="Review coverage"
+              value={`${reviewCoverageRate}%`}
+              hint="How many of your services already have public review signals."
+              accent="bg-amber-100 text-amber-700"
+              icon={<Store className="h-6 w-6" />}
+            />
+            <MetricCard
+              label="Settled payouts"
+              value={String(settledPayouts.length)}
+              hint="Paid booking payouts already settled to your partner account."
+              accent="bg-rose-100 text-rose-700"
+              icon={<Activity className="h-6 w-6" />}
+            />
+          </div>
+
+          <div className="grid gap-6 xl:grid-cols-2">
+            <TrendChart
+              data={partnerRevenueTrend}
+              color="#e11d48"
+              metricLabel="Revenue trend"
+              metricValue={formatCurrency(grossRevenue)}
+            />
+            <TrendChart
+              data={partnerBookingVolumeTrend}
+              color="#0ea5e9"
+              metricLabel="Booking volume"
+              metricValue={String(scopedBookings.length)}
+            />
+          </div>
+
+          <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
+            <DistributionDonut
+              title="Approval pipeline"
+              items={approvalStatusItems.length ? approvalStatusItems : [{ label: 'No approvals yet', value: 0, tone: '#cbd5e1' }]}
+              centerLabel="Published"
+              centerValue={`${publishedServices.length}`}
+            />
+            <RankedBars
+              title="Service coverage by city"
+              items={serviceCityDemand.length ? serviceCityDemand : [{ label: 'No city data yet', value: 0, tone: 'linear-gradient(90deg,#cbd5e1,#94a3b8)' }]}
+              formatter={(value) => `${value} listings`}
+            />
+          </div>
+
+          <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+            <RankedBars
+              title="Top commercial performers"
+              items={topServices.length ? topServices : [{ label: 'No service data yet', value: 0, tone: 'linear-gradient(90deg,#cbd5e1,#94a3b8)' }]}
+              formatter={(value) => (value > 0 ? formatCurrency(value) : 'No revenue yet')}
+            />
+            <DistributionDonut
+              title="Booking status mix"
+              items={bookingStatusItems}
+              centerLabel="Closed"
+              centerValue={`${closedBookings.length}`}
+            />
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'add-service' && (
+        <div className="space-y-8">
+          <PartnerServiceStudio showExistingServices={false} />
+        </div>
+      )}
+
+      {activeTab === 'manage-services' && (
+        <div className="space-y-8">
+          <InsightPanel eyebrow="Service lineup" title="Review, update, and archive your inventory.">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <FilterTabs
                 value={serviceFilter}
@@ -1069,7 +1203,7 @@ export function PartnerDashboardView() {
         </div>
       )}
 
-      {activeTab === 'bookings' && (
+      {activeTab === 'orders' && (
         <div className="space-y-8">
           <InsightPanel eyebrow="Orders" title="Manage your active work and booking history.">
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -1094,8 +1228,111 @@ export function PartnerDashboardView() {
         </div>
       )}
 
+      {activeTab === 'history' && (
+        <div className="space-y-8">
+          <div className="grid gap-4 xl:grid-cols-3">
+            <MetricCard
+              label="Closed orders"
+              value={String(closedBookings.length)}
+              hint="Completed, cancelled, or rejected bookings already stored in your partner history."
+              accent="bg-slate-100 text-slate-700"
+              icon={<ClipboardList className="h-6 w-6" />}
+            />
+            <MetricCard
+              label="Paid history"
+              value={String(paidOrders.length)}
+              hint="Bookings in your history with confirmed successful payments."
+              accent="bg-emerald-100 text-emerald-700"
+              icon={<BadgeIndianRupee className="h-6 w-6" />}
+            />
+            <MetricCard
+              label="Pending payouts"
+              value={String(payoutPending.length)}
+              hint="History records that still need payout settlement processing."
+              accent="bg-amber-100 text-amber-700"
+              icon={<Activity className="h-6 w-6" />}
+            />
+          </div>
+
+          <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+            <ActivityTimeline title="Booking history timeline" items={historyTimeline} />
+            <InsightPanel eyebrow="Settlement history" title="Payout and fulfilment progress">
+              <div className="space-y-4">
+                {paidOrders.slice(0, 6).map((booking) => (
+                  <div key={booking.id} className="rounded-[24px] border border-slate-200 bg-white/70 p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="font-semibold text-slate-900">{booking.service.title}</p>
+                        <p className="mt-1 text-sm text-slate-500">
+                          {new Date(booking.updatedAt).toLocaleDateString('en-IN')} • {formatCurrency(booking.totalAmount)}
+                        </p>
+                      </div>
+                      <span className="rounded-full border border-slate-200 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-600">
+                        {booking.payment?.payoutStatus ?? 'NOT_REQUESTED'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+                {!paidOrders.length ? <p className="text-sm text-slate-500">Payment-backed history will appear here after your first paid booking.</p> : null}
+              </div>
+            </InsightPanel>
+          </div>
+        </div>
+      )}
+
       {activeTab === 'availability' && <PartnerAvailabilityManager availability={profile?.availability ?? []} />}
-      {activeTab === 'payouts' && <PartnerPayoutManager bookings={bookings} />}
+      {activeTab === 'earnings' && (
+        <div className="space-y-8">
+          <div className="grid gap-4 xl:grid-cols-3">
+            <MetricCard
+              label="Gross paid revenue"
+              value={formatCurrency(grossRevenue)}
+              hint="Live paid booking value pulled from your booking and payment records."
+              accent="bg-emerald-100 text-emerald-700"
+              icon={<BadgeIndianRupee className="h-6 w-6" />}
+            />
+            <MetricCard
+              label="Average order value"
+              value={formatCurrency(averageOrderValue)}
+              hint="Average value of successful paid orders on your partner account."
+              accent="bg-sky-100 text-sky-700"
+              icon={<LayoutGrid className="h-6 w-6" />}
+            />
+            <MetricCard
+              label="Requested payouts"
+              value={String(payoutPending.length + settledPayouts.length)}
+              hint="All partner payout records that have entered the payout workflow."
+              accent="bg-rose-100 text-rose-700"
+              icon={<Activity className="h-6 w-6" />}
+            />
+          </div>
+
+          <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+            <TrendChart
+              data={partnerRevenueTrend}
+              color="#059669"
+              metricLabel="Collected revenue"
+              metricValue={formatCurrency(grossRevenue)}
+            />
+            <DistributionDonut
+              title="Payout status mix"
+              items={groupCounts(
+                paidOrders.map((booking) => booking.payment?.payoutStatus ?? 'NOT_REQUESTED'),
+                {
+                  NOT_REQUESTED: '#94a3b8',
+                  PENDING: '#f59e0b',
+                  PAID: '#10b981'
+                },
+                ['NOT_REQUESTED', 'PENDING', 'PAID']
+              )}
+              centerLabel="Eligible"
+              centerValue={`${paidOrders.length}`}
+            />
+          </div>
+
+          <PartnerPayoutManager bookings={bookings} />
+        </div>
+      )}
       {activeTab === 'profile' && <PartnerProfileManager profile={profile ?? {}} />}
 
       {activeTab === 'reviews' && <VendorReviewManager />}

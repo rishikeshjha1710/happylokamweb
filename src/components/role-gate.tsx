@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import { ReactNode, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ME_QUERY } from '@/graphql/queries';
-import { clearSession, getDashboardPathForRole, getStoredRole, isSessionRole, SessionRole } from '@/lib/auth';
+import { clearSession, getDashboardPathForRole, getStoredRole, isSessionRole, SessionRole, normalizeSessionRole } from '@/lib/auth';
 import { PremiumLoader } from './dashboard-primitives';
 
 type RoleGateProps = {
@@ -47,9 +47,10 @@ export function RoleGate({ requiredRole, children }: RoleGateProps) {
       return;
     }
 
-    if (data.me.role !== requiredRole) {
+    const normalizedRole = normalizeSessionRole(data.me.role);
+    if (normalizedRole !== requiredRole) {
       setStatus('redirecting');
-      router.replace(getDashboardPathForRole(data.me.role));
+      router.replace(getDashboardPathForRole(normalizedRole));
       return;
     }
 

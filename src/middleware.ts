@@ -18,7 +18,7 @@ function normalizeRole(role: string | null | undefined) {
 }
 
 function getDashboardPath(role: string) {
-  return role === 'PARTNER' ? '/dashboard/vendor' : `/dashboard/${role.toLowerCase()}`;
+  return role === 'PARTNER' ? '/dashboard/partner' : `/dashboard/${role.toLowerCase()}`;
 }
 
 function withSecurityHeaders(response: NextResponse, pathname: string) {

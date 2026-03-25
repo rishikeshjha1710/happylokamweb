@@ -38,6 +38,7 @@ import {
 } from '@/graphql/queries';
 import { Activity, MessageSquareQuote, PackageCheck, CalendarDays, Store, CreditCard, UserCircle } from 'lucide-react';
 import { getStoredRole } from '@/lib/auth';
+import { fileToDataUrl, filesToDataUrls } from '@/lib/media';
 import { MarketplaceImage } from './marketplace-image';
 import { PremiumAlert, PremiumLoader, Skeleton, TermsModal } from './dashboard-primitives';
 
@@ -87,6 +88,63 @@ function ServiceImagePreview({ title, imageUrl }: { title: string; imageUrl?: st
       />
     </div>
   );
+}
+
+function buildServiceSummary({
+  summary,
+  products,
+  tags,
+  openingHour,
+  closingHour
+}: {
+  summary: string;
+  products?: string;
+  tags?: string;
+  openingHour?: string;
+  closingHour?: string;
+}) {
+  const segments = [summary.trim()];
+
+  if (products?.trim()) {
+    segments.push(`Products: ${products.trim()}`);
+  }
+
+  if (tags?.trim()) {
+    segments.push(`Tags: ${tags.trim()}`);
+  }
+
+  if (openingHour || closingHour) {
+    segments.push(`Hours: ${openingHour || 'N/A'} - ${closingHour || 'N/A'}`);
+  }
+
+  return segments
+    .join(' | ')
+    .slice(0, 200)
+    .trim();
+}
+
+function validateServiceInput({ title, summary, description, priceFrom, city }: { title: string; summary: string; description: string; priceFrom: string; city: string }) {
+  if (title.trim().length < 3) {
+    return 'Service title must be at least 3 characters.';
+  }
+
+  if (summary.trim().length < 20) {
+    return 'Service summary must be at least 20 characters.';
+  }
+
+  if (description.trim().length < 40) {
+    return 'Service description must be at least 40 characters.';
+  }
+
+  if (!priceFrom || Number(priceFrom) < 1) {
+    return 'Please enter a valid starting price.';
+  }
+
+  if (!city.trim()) {
+    return 'Please enter the operating city.';
+  }
+
+  return null;
 }
 
 type ServiceActionPanelProps = {
@@ -683,14 +741,61 @@ export function PartnerServiceCard({ service }: PartnerServiceCardProps) {
     durationHours: service.durationHours ? String(service.durationHours) : '',
     guestCapacity: service.guestCapacity ? String(service.guestCapacity) : '',
     coverImageUrl: service.coverImageUrl ?? '',
-    galleryUrls: (service.galleryUrls ?? []).join(', ')
+    galleryUrls: service.galleryUrls ?? []
   });
 
   const refetchQueries = [{ query: MY_VENDOR_SERVICES_QUERY }];
   const [updateService, updateState] = useMutation(UPDATE_SERVICE_MUTATION, { refetchQueries });
   const [deleteService, deleteState] = useMutation(DELETE_SERVICE_MUTATION, { refetchQueries });
 
+  async function handleCoverUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    try {
+      const image = await fileToDataUrl(file);
+      setForm((current) => ({ ...current, coverImageUrl: image }));
+      setMessage('Cover image selected successfully.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Image upload failed.');
+    } finally {
+      event.target.value = '';
+    }
+  }
+
+  async function handleGalleryUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const files = event.target.files;
+    if (!files?.length) {
+      return;
+    }
+
+    try {
+      const images = await filesToDataUrls(files, 6);
+      setForm((current) => ({ ...current, galleryUrls: images }));
+      setMessage('Gallery images selected successfully.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Gallery upload failed.');
+    } finally {
+      event.target.value = '';
+    }
+  }
+
   async function handleUpdate() {
+    const validationError = validateServiceInput({
+      title: form.title,
+      summary: form.summary,
+      description: form.description,
+      priceFrom: form.priceFrom,
+      city: form.city
+    });
+
+    if (validationError) {
+      setMessage(validationError);
+      return;
+    }
+
     try {
       await updateService({
         variables: {
@@ -707,7 +812,7 @@ export function PartnerServiceCard({ service }: PartnerServiceCardProps) {
             durationHours: form.durationHours ? Number(form.durationHours) : undefined,
             guestCapacity: form.guestCapacity ? Number(form.guestCapacity) : undefined,
             coverImageUrl: form.coverImageUrl || undefined,
-            galleryUrls: form.galleryUrls ? form.galleryUrls.split(',').map(s => s.trim()).filter(Boolean) : []
+            galleryUrls: form.galleryUrls
           }
         }
       });
@@ -831,19 +936,41 @@ export function PartnerServiceCard({ service }: PartnerServiceCardProps) {
             placeholder="Guest capacity"
             className="rounded-2xl border border-rose-100 px-4 py-3 text-sm"
           />
-          <input
-            value={form.coverImageUrl}
-            onChange={(event) => setForm((current) => ({ ...current, coverImageUrl: event.target.value }))}
-            placeholder="Cover image URL"
-            className="rounded-2xl border border-rose-100 px-4 py-3 text-sm md:col-span-2"
-          />
-          <textarea
-            rows={2}
-            value={form.galleryUrls}
-            onChange={(event) => setForm((current) => ({ ...current, galleryUrls: event.target.value }))}
-            placeholder="Gallery image URLs (comma separated)"
-            className="rounded-2xl border border-rose-100 px-4 py-3 text-sm md:col-span-2"
-          />
+          <div className="rounded-2xl border border-rose-100 bg-white px-4 py-3 text-sm md:col-span-2">
+            <label className="text-xs font-bold uppercase tracking-[0.18em] text-rose-500">Cover image upload</label>
+            <input type="file" accept="image/*" onChange={handleCoverUpload} className="mt-3 block w-full text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-rose-50 file:px-4 file:py-2 file:font-semibold file:text-rose-700" />
+            {form.coverImageUrl ? (
+              <button
+                type="button"
+                onClick={() => setForm((current) => ({ ...current, coverImageUrl: '' }))}
+                className="mt-3 rounded-full border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-700"
+              >
+                Remove cover image
+              </button>
+            ) : null}
+          </div>
+          <div className="rounded-2xl border border-rose-100 bg-white px-4 py-3 text-sm md:col-span-2">
+            <label className="text-xs font-bold uppercase tracking-[0.18em] text-rose-500">Gallery uploads</label>
+            <input type="file" accept="image/*" multiple onChange={handleGalleryUpload} className="mt-3 block w-full text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-rose-50 file:px-4 file:py-2 file:font-semibold file:text-rose-700" />
+            {form.galleryUrls.length ? (
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {form.galleryUrls.map((image, index) => (
+                  <div key={`${service.id}-gallery-${index}`} className="relative overflow-hidden rounded-2xl border border-rose-100 bg-slate-100">
+                    <div className="relative h-24">
+                      <MarketplaceImage src={image} alt={`${form.title || service.title} gallery ${index + 1}`} fill sizes="96px" className="object-cover" />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setForm((current) => ({ ...current, galleryUrls: current.galleryUrls.filter((_, itemIndex) => itemIndex !== index) }))}
+                      className="w-full border-t border-rose-100 bg-white px-3 py-2 text-xs font-semibold text-rose-700"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
       <div className="mt-4 flex flex-wrap gap-3">
@@ -871,7 +998,7 @@ export function PartnerServiceCard({ service }: PartnerServiceCardProps) {
   );
 }
 
-export function PartnerServiceStudio() {
+export function PartnerServiceStudio({ showExistingServices = true }: { showExistingServices?: boolean }) {
   const { data: categoriesData } = useQuery(SERVICE_CATEGORIES_QUERY);
   const { data: servicesData } = useQuery(MY_VENDOR_SERVICES_QUERY);
   const [message, setMessage] = useState<string | null>(null);
@@ -888,7 +1015,7 @@ export function PartnerServiceStudio() {
     durationHours: '',
     guestCapacity: '',
     coverImageUrl: '',
-    galleryUrls: '',
+    galleryUrls: [] as string[],
     phone: '',
     email: '',
     tags: '',
@@ -910,7 +1037,54 @@ export function PartnerServiceStudio() {
 
   function handleSubmitAttempt(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const validationError = validateServiceInput({
+      title: form.title,
+      summary: form.summary,
+      description: form.description,
+      priceFrom: form.priceFrom,
+      city: form.city
+    });
+
+    if (validationError) {
+      setMessage(validationError);
+      return;
+    }
+
     setIsTermsOpen(true);
+  }
+
+  async function handleCoverUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    try {
+      const image = await fileToDataUrl(file);
+      setForm((current) => ({ ...current, coverImageUrl: image }));
+      setMessage('Cover image selected successfully.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Image upload failed.');
+    } finally {
+      event.target.value = '';
+    }
+  }
+
+  async function handleGalleryUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const files = event.target.files;
+    if (!files?.length) {
+      return;
+    }
+
+    try {
+      const images = await filesToDataUrls(files, 6);
+      setForm((current) => ({ ...current, galleryUrls: images }));
+      setMessage('Gallery images selected successfully.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Gallery upload failed.');
+    } finally {
+      event.target.value = '';
+    }
   }
 
   async function handleCreate() {
@@ -920,7 +1094,7 @@ export function PartnerServiceStudio() {
         variables: {
           input: {
             title: form.title,
-            summary: `${form.summary} | Products: ${form.products || 'None'} | Tags: ${form.tags || 'None'} | Hours: ${form.openingHour || 'N/A'} - ${form.closingHour || 'N/A'}`,
+            summary: buildServiceSummary(form),
             description: form.description,
             categorySlug: form.categorySlug,
             priceFrom: Number(form.priceFrom),
@@ -929,9 +1103,8 @@ export function PartnerServiceStudio() {
             durationHours: form.durationHours ? Number(form.durationHours) : undefined,
             guestCapacity: form.guestCapacity ? Number(form.guestCapacity) : undefined,
             coverImageUrl: form.coverImageUrl || undefined,
-            galleryUrls: form.galleryUrls ? form.galleryUrls.split(',').map(s => s.trim()).filter(Boolean) : [],
-            status: form.status,
-            approvalStatus: 'PENDING'
+            galleryUrls: form.galleryUrls,
+            status: form.status
           }
         }
       });
@@ -948,7 +1121,7 @@ export function PartnerServiceStudio() {
         durationHours: '',
         guestCapacity: '',
         coverImageUrl: '',
-        galleryUrls: '',
+        galleryUrls: [],
         phone: '',
         email: '',
         tags: '',
@@ -1038,6 +1211,14 @@ By clicking 'Accept & Continue', you agree to these legal terms as updated by th
                     onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
                     placeholder="Service Title Name (e.g. Premium Wedding Photography)"
                     className="w-full rounded-2xl border border-rose-100 px-4 py-3.5 text-sm font-semibold text-slate-900"
+                />
+                <textarea
+                    required
+                    rows={2}
+                    value={form.summary}
+                    onChange={(event) => setForm((current) => ({ ...current, summary: event.target.value }))}
+                    placeholder="Short service summary for the marketplace card"
+                    className="w-full rounded-2xl border border-rose-100 px-4 py-3 text-sm"
                 />
             </div>
 
@@ -1167,12 +1348,53 @@ By clicking 'Accept & Continue', you agree to these legal terms as updated by th
                 />
             </div>
 
-            <input
-                value={form.coverImageUrl}
-                onChange={(event) => setForm((current) => ({ ...current, coverImageUrl: event.target.value }))}
-                placeholder="Cover Image URL (Polished Photography)"
-                className="rounded-2xl border border-rose-100 px-4 py-3 text-sm md:col-span-2"
-            />
+            <div className="rounded-2xl border border-rose-100 bg-white px-4 py-3 text-sm md:col-span-2">
+                <label className="text-[10px] font-bold uppercase tracking-[0.24em] text-rose-500">Cover image upload</label>
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleCoverUpload}
+                    className="mt-3 block w-full text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-rose-50 file:px-4 file:py-2 file:font-semibold file:text-rose-700"
+                />
+                {form.coverImageUrl ? (
+                  <button
+                    type="button"
+                    onClick={() => setForm((current) => ({ ...current, coverImageUrl: '' }))}
+                    className="mt-3 rounded-full border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-700"
+                  >
+                    Remove cover image
+                  </button>
+                ) : null}
+            </div>
+
+            <div className="rounded-2xl border border-rose-100 bg-white px-4 py-3 text-sm md:col-span-2">
+                <label className="text-[10px] font-bold uppercase tracking-[0.24em] text-rose-500">Gallery uploads</label>
+                <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleGalleryUpload}
+                    className="mt-3 block w-full text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-rose-50 file:px-4 file:py-2 file:font-semibold file:text-rose-700"
+                />
+                {form.galleryUrls.length ? (
+                  <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {form.galleryUrls.map((image, index) => (
+                      <div key={`new-gallery-${index}`} className="relative overflow-hidden rounded-2xl border border-rose-100 bg-slate-100">
+                        <div className="relative h-24">
+                          <MarketplaceImage src={image} alt={`${form.title || 'New service'} gallery ${index + 1}`} fill sizes="96px" className="object-cover" />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setForm((current) => ({ ...current, galleryUrls: current.galleryUrls.filter((_, itemIndex) => itemIndex !== index) }))}
+                          className="w-full border-t border-rose-100 bg-white px-3 py-2 text-xs font-semibold text-rose-700"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+            </div>
 
             <button
               type="submit"
@@ -1187,13 +1409,15 @@ By clicking 'Accept & Continue', you agree to these legal terms as updated by th
           <MessageBanner message={message} />
         </div>
       </div>
-      <div className="space-y-4">
-        {(servicesData?.myVendorServices ?? []).map(
-          (service: PartnerServiceCardProps['service']) => (
-            <PartnerServiceCard key={service.id} service={service} />
-          )
-        )}
-      </div>
+      {showExistingServices ? (
+        <div className="space-y-4">
+          {(servicesData?.myVendorServices ?? []).map(
+            (service: PartnerServiceCardProps['service']) => (
+              <PartnerServiceCard key={service.id} service={service} />
+            )
+          )}
+        </div>
+      ) : null}
     </div>
   );
 }

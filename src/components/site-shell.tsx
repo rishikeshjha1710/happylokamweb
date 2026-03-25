@@ -32,7 +32,7 @@ function getExploreHref(role: SessionRole | null) {
   }
 
   if (role === 'PARTNER') {
-    return '/dashboard/vendor?tab=services';
+    return '/dashboard/partner?tab=analytics';
   }
 
   if (role === 'ADMIN') {

@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { CheckCircle2, Info, LoaderCircle, TriangleAlert } from 'lucide-react';
+import { CheckCircle2, Info, TriangleAlert } from 'lucide-react';
 
 type MetricCardProps = {
   label: string;
@@ -290,15 +290,11 @@ export function Skeleton({ className }: { className?: string }) {
 
 export function PremiumLoader({ className = '' }: { className?: string }) {
   return (
-    <div className={`inline-flex items-center justify-center gap-3 ${className}`}>
-      <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-rose-100 bg-white/90 shadow-[0_12px_35px_rgba(225,29,72,0.15)]">
-        <span className="absolute inset-1 rounded-full border border-rose-100/80" />
-        <LoaderCircle className="h-5 w-5 animate-spin text-rose-600" />
-      </span>
+    <div className={`inline-flex items-center justify-center ${className}`}>
       <span className="flex items-center gap-1.5">
-        <span className="h-2 w-2 animate-[bounce_1s_infinite] rounded-full bg-rose-500 [animation-delay:-0.28s]" />
-        <span className="h-2 w-2 animate-[bounce_1s_infinite] rounded-full bg-rose-500 [animation-delay:-0.14s]" />
-        <span className="h-2 w-2 animate-[bounce_1s_infinite] rounded-full bg-rose-500" />
+        <span className="h-2.5 w-2.5 animate-[bounce_1s_infinite] rounded-full bg-rose-500 [animation-delay:-0.28s]" />
+        <span className="h-2.5 w-2.5 animate-[bounce_1s_infinite] rounded-full bg-rose-500 [animation-delay:-0.14s]" />
+        <span className="h-2.5 w-2.5 animate-[bounce_1s_infinite] rounded-full bg-rose-500" />
       </span>
     </div>
   );

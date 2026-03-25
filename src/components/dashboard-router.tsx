@@ -26,7 +26,7 @@ export function DashboardRouter() {
           Taking you to your dashboard.
         </h1>
         <p className="mt-4 max-w-lg text-sm leading-7 text-slate-600">
-          Your saved role decides whether you land in the user profile workspace, vendor operating console, or admin control room.
+          Your saved role decides whether you land in the user profile workspace, partner operating console, or admin control room.
         </p>
       </div>
     </section>

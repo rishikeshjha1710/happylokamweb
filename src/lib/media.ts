@@ -36,3 +36,29 @@ export function resolveServiceImage(src: string | null | undefined, fallbackTitl
 export function isExternalImage(src: string) {
   return /^https?:\/\//i.test(src);
 }
+
+export function isDataImage(src: string | null | undefined) {
+  return typeof src === 'string' && src.startsWith('data:image/');
+}
+
+export async function fileToDataUrl(file: File, maxSizeMb = 4) {
+  if (!file.type.startsWith('image/')) {
+    throw new Error('Please upload a valid image file.');
+  }
+
+  if (file.size > maxSizeMb * 1024 * 1024) {
+    throw new Error(`Please upload an image smaller than ${maxSizeMb} MB.`);
+  }
+
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
+    reader.onerror = () => reject(new Error('Unable to read the selected image.'));
+    reader.readAsDataURL(file);
+  });
+}
+
+export async function filesToDataUrls(files: FileList | File[], maxFiles = 6, maxSizeMb = 4) {
+  const items = Array.from(files).slice(0, maxFiles);
+  return Promise.all(items.map((file) => fileToDataUrl(file, maxSizeMb)));
+}

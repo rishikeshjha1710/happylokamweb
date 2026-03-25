@@ -74,7 +74,7 @@ export function getDashboardPathForRole(role: string | null | undefined) {
     return '/login';
   }
 
-  return normalizedRole === 'PARTNER' ? '/dashboard/vendor' : `/dashboard/${normalizedRole.toLowerCase()}`;
+  return normalizedRole === 'PARTNER' ? '/dashboard/partner' : `/dashboard/${normalizedRole.toLowerCase()}`;
 }
 
 export function readStoredSession() {
