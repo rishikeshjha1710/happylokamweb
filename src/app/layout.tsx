@@ -23,6 +23,11 @@ export const metadata: Metadata = {
   description: 'Premium event booking platform for users, vendors, and admins with secure bookings, polished dashboards, and commerce-ready operations.',
   applicationName: 'Happylokam',
   keywords: ['event booking platform', 'vendor marketplace', 'wedding planning', 'event services', 'Happylokam'],
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg'
+  },
   openGraph: {
     title: 'Happylokam',
     description: 'Secure event discovery, booking, vendor operations, and admin control in one premium platform.',
