@@ -76,7 +76,7 @@ export function DashboardShell({
                         {eyebrow}
                       </span>
                     </div>
-                    <h1 className="mt-6 font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+                    <h1 className="mt-6 break-words font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
                       {title}
                     </h1>
                     <p className="mt-5 max-w-2xl text-sm leading-7 text-white/72 sm:text-base sm:leading-8">

@@ -41,7 +41,7 @@ export function MetricCard({ label, value, hint, accent, icon, badge }: MetricCa
         {badge ? <span className="rounded-full border border-slate-200 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-600">{badge}</span> : null}
       </div>
       <p className="mt-5 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">{label}</p>
-      <p className="mt-3 font-display text-4xl tracking-tight text-slate-950">{value}</p>
+      <p className="mt-3 break-words font-display text-3xl tracking-tight text-slate-950 sm:text-4xl">{value}</p>
       <p className="mt-3 text-sm leading-6 text-slate-600">{hint}</p>
     </div>
   );
@@ -51,7 +51,7 @@ export function InsightPanel({ eyebrow, title, copy, children, className = '' }:
   return (
     <section className={`rounded-[30px] border border-white/70 bg-white/92 p-6 shadow-[0_20px_80px_rgba(15,23,42,0.08)] ${className}`}>
       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">{eyebrow}</p>
-      <h3 className="mt-3 font-display text-3xl tracking-tight text-slate-950">{title}</h3>
+      <h3 className="mt-3 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">{title}</h3>
       {copy ? <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">{copy}</p> : null}
       <div className="mt-6">{children}</div>
     </section>
@@ -87,7 +87,7 @@ export function TrendChart({
       <div className="flex items-end justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/55">{metricLabel}</p>
-          <p className="mt-3 font-display text-4xl tracking-tight">{metricValue}</p>
+          <p className="mt-3 break-words font-display text-3xl tracking-tight sm:text-4xl">{metricValue}</p>
         </div>
         <div className="rounded-full border border-white/12 px-3 py-1 text-xs uppercase tracking-[0.18em] text-white/70">
           {data.length} points
@@ -107,7 +107,7 @@ export function TrendChart({
         />
         <polyline fill="none" stroke={color} strokeWidth="4" strokeLinejoin="round" strokeLinecap="round" points={points} />
       </svg>
-      <div className="mt-4 grid grid-cols-6 gap-2 text-[11px] uppercase tracking-[0.16em] text-white/50">
+      <div className="mt-4 grid grid-cols-2 gap-2 text-[11px] uppercase tracking-[0.16em] text-white/50 sm:grid-cols-3 lg:grid-cols-6">
         {data.map((item) => (
           <span key={item.label}>{item.label}</span>
         ))}
@@ -143,7 +143,7 @@ export function DistributionDonut({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Distribution</p>
-          <h4 className="mt-3 font-display text-2xl tracking-tight text-slate-950">{title}</h4>
+          <h4 className="mt-3 break-words font-display text-xl tracking-tight text-slate-950 sm:text-2xl">{title}</h4>
         </div>
         <span className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
           {total} total
@@ -203,7 +203,7 @@ export function RankedBars({
 
   return (
     <div className="rounded-[28px] border border-slate-200 bg-white p-5">
-      <h4 className="font-display text-2xl tracking-tight text-slate-950">{title}</h4>
+      <h4 className="break-words font-display text-xl tracking-tight text-slate-950 sm:text-2xl">{title}</h4>
       <div className="mt-5 space-y-4">
         {items.map((item) => (
           <div key={item.label}>
@@ -257,7 +257,7 @@ export function FilterTabs({
 export function ActivityTimeline({ title, items }: { title: string; items: TimelineItem[] }) {
   return (
     <div className="rounded-[28px] border border-slate-200 bg-white p-5">
-      <h4 className="font-display text-2xl tracking-tight text-slate-950">{title}</h4>
+      <h4 className="break-words font-display text-xl tracking-tight text-slate-950 sm:text-2xl">{title}</h4>
       <div className="mt-6 space-y-4">
         {items.map((item) => (
           <div key={item.id} className="flex gap-4">
@@ -320,7 +320,7 @@ export function TermsModal({
       <div className="w-full max-w-2xl animate-slide-up rounded-[40px] border border-white/20 bg-white p-8 shadow-2xl md:p-12">
         <div className="flex flex-col">
           <span className="pill w-fit">Mandatory Review</span>
-          <h3 className="mt-6 font-display text-3xl tracking-tight text-slate-950 md:text-4xl">{title}</h3>
+      <h3 className="mt-6 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl md:text-4xl">{title}</h3>
           <div className="mt-8 max-h-[300px] overflow-y-auto rounded-3xl border border-rose-100 bg-rose-50/30 p-6">
             <div className="prose prose-sm prose-slate max-w-none">
               <p className="whitespace-pre-wrap text-sm leading-8 text-slate-600">{content}</p>

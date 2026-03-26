@@ -50,12 +50,12 @@ export function ServiceDetailView({ slug }: { slug: string }) {
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/5 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
               <span className="pill border-white/20 bg-white/10 text-white">{service.category.name}</span>
-              <h1 className="mt-4 font-display text-4xl tracking-tight md:text-6xl">{service.title}</h1>
+              <h1 className="mt-4 break-words font-display text-3xl tracking-tight sm:text-4xl md:text-6xl">{service.title}</h1>
               <p className="mt-4 max-w-2xl text-base text-white/80">{service.summary}</p>
             </div>
           </div>
           <div className="panel">
-            <h2 className="font-display text-3xl tracking-tight">Experience overview</h2>
+            <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">Experience overview</h2>
             <p className="mt-4 text-base leading-7 text-slate-600">{service.description}</p>
             <div className="mt-6 grid gap-4 md:grid-cols-3">
               <div className="stat-tile">
@@ -73,7 +73,7 @@ export function ServiceDetailView({ slug }: { slug: string }) {
             </div>
           </div>
           <div className="panel">
-            <h2 className="font-display text-3xl tracking-tight">Client reviews</h2>
+            <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">Client reviews</h2>
             <div className="mt-6 grid gap-4">
               {reviewData?.serviceReviews?.length ? (
                 reviewData.serviceReviews.map((review: { id: string; rating: number; comment?: string; user: { fullName: string }; createdAt: string }) => (
@@ -105,7 +105,7 @@ export function ServiceDetailView({ slug }: { slug: string }) {
               </div>
               <div>
                 <p className="pill">Partner spotlight</p>
-                <h2 className="mt-3 font-display text-3xl tracking-tight">{service.vendor.businessName}</h2>
+                <h2 className="mt-3 break-words font-display text-2xl tracking-tight sm:text-3xl">{service.vendor.businessName}</h2>
               </div>
             </div>
             <p className="mt-4 text-sm text-slate-600">{service.vendor.description ?? 'Verified partner on Happylokam.'}</p>
@@ -186,7 +186,7 @@ export function PartnerDetailView({ vendorId }: { vendorId: string }) {
             </div>
             <div>
               <span className="pill">{vendor.isVerified ? 'Verified partner' : 'Marketplace partner'}</span>
-              <h1 className="mt-3 font-display text-4xl tracking-tight text-slate-950 md:text-6xl">{vendor.businessName}</h1>
+              <h1 className="mt-3 break-words font-display text-3xl tracking-tight text-slate-950 sm:text-4xl md:text-6xl">{vendor.businessName}</h1>
             </div>
           </div>
           <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">{vendor.description ?? 'Premium event production and hospitality partner.'}</p>
@@ -209,7 +209,7 @@ export function PartnerDetailView({ vendorId }: { vendorId: string }) {
           </div>
         </div>
         <div className="panel">
-          <h2 className="font-display text-3xl tracking-tight">Availability windows</h2>
+          <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">Availability windows</h2>
           <div className="mt-6 space-y-3">
             {vendor.availability?.length ? (
               vendor.availability.map((slot: { id: string; startAt: string; endAt: string; label?: string }) => (
@@ -227,12 +227,12 @@ export function PartnerDetailView({ vendorId }: { vendorId: string }) {
         </div>
       </div>
       <div className="mt-10">
-        <h2 className="font-display text-3xl tracking-tight text-slate-950">Published experiences</h2>
+        <h2 className="break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">Published experiences</h2>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           {vendorServices.length ? (
             vendorServices.map((service: { id: string; title: string; summary: string; slug: string; priceFrom: number }) => (
               <div key={service.id} className="panel">
-                <h3 className="font-display text-2xl tracking-tight">{service.title}</h3>
+                <h3 className="break-words font-display text-xl tracking-tight sm:text-2xl">{service.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-slate-600">{service.summary}</p>
                 <div className="mt-5 flex items-center justify-between">
                   <span className="text-sm font-semibold text-rose-700">Rs. {service.priceFrom.toLocaleString('en-IN')}</span>

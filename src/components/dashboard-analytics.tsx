@@ -165,8 +165,8 @@ export function GlobalControls({
   const [selectedCity, setSelectedCity] = useState('ALL');
 
   return (
-    <div className="panel flex flex-wrap items-center gap-4 bg-slate-50/50 p-3 ring-1 ring-slate-200/50">
-      <div className="relative flex-1 min-w-[240px]">
+    <div className="panel flex flex-col gap-4 bg-slate-50/50 p-3 ring-1 ring-slate-200/50 xl:flex-row xl:items-center">
+      <div className="relative w-full min-w-0 flex-1">
         <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
         <input
           type="text"
@@ -176,15 +176,15 @@ export function GlobalControls({
         />
       </div>
 
-      <div className="flex items-center gap-2">
-        <label className="flex items-center gap-2 rounded-2xl bg-white px-4 py-2 text-xs font-bold text-slate-500 shadow-sm ring-1 ring-slate-200">
+      <div className="flex flex-wrap items-center gap-2">
+        <label className="flex w-full items-center justify-between gap-2 rounded-2xl bg-white px-4 py-2 text-xs font-bold text-slate-500 shadow-sm ring-1 ring-slate-200 sm:w-auto sm:justify-start">
           <Calendar className="h-3.5 w-3.5" />
           <span>Last 30 Days</span>
           <ChevronDown className="h-3 w-3" />
         </label>
 
         <select 
-          className="rounded-2xl border-none bg-white px-4 py-2 text-xs font-bold text-slate-600 shadow-sm ring-1 ring-slate-200 transition focus:ring-rose-500"
+          className="w-full rounded-2xl border-none bg-white px-4 py-2 text-xs font-bold text-slate-600 shadow-sm ring-1 ring-slate-200 transition focus:ring-rose-500 sm:w-auto"
           value={selectedCity}
           onChange={(e) => {
             setSelectedCity(e.target.value);
@@ -198,7 +198,7 @@ export function GlobalControls({
 
       <div className="h-8 w-px bg-slate-200 hidden md:block" />
 
-      <div className="flex items-center gap-1 overflow-x-auto pb-1 md:pb-0">
+      <div className="flex w-full items-center gap-1 overflow-x-auto pb-1 md:pb-0">
         {['ALL', ...statuses].map((status) => (
           <button
             key={status}
@@ -221,7 +221,7 @@ export function GlobalControls({
         type="button"
         onClick={onExport}
         disabled={!onExport}
-        className="flex items-center gap-2 rounded-2xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white transition hover:bg-rose-600 disabled:cursor-not-allowed disabled:opacity-55"
+        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white transition hover:bg-rose-600 disabled:cursor-not-allowed disabled:opacity-55 xl:w-auto"
       >
         <Filter className="h-3.5 w-3.5" />
         <span>{exportLabel}</span>
@@ -252,7 +252,7 @@ export function ProfileExecutive({
     <div className="grid gap-8 lg:grid-cols-[1fr_2fr]">
       <div className="space-y-6">
         <div className="panel border-rose-100 bg-white p-8 text-center ring-1 ring-rose-50">
-          <div className="relative mx-auto flex h-32 w-32 items-center justify-center overflow-hidden rounded-[48px] border border-rose-100 bg-[linear-gradient(135deg,#be123c,#f43f5e)] text-4xl font-bold text-white shadow-2xl">
+          <div className="relative mx-auto flex h-24 w-24 items-center justify-center overflow-hidden rounded-[48px] border border-rose-100 bg-[linear-gradient(135deg,#be123c,#f43f5e)] text-3xl font-bold text-white shadow-2xl sm:h-32 sm:w-32 sm:text-4xl">
             {hasAvatar ? (
               <MarketplaceImage
                 src={user.avatarUrl}
@@ -265,7 +265,7 @@ export function ProfileExecutive({
               <span>{title.charAt(0).toUpperCase()}</span>
             )}
           </div>
-          <h3 className="mt-6 font-display text-2xl font-bold text-slate-950">{title}</h3>
+          <h3 className="mt-6 break-words font-display text-2xl font-bold text-slate-950 sm:text-3xl">{title}</h3>
           <p className="mt-2 text-sm text-slate-500 font-medium">{role === 'PARTNER' ? 'Business Partner' : role === 'ADMIN' ? 'Site Administrator' : 'Platform Member'}</p>
           <div className="mt-6 flex justify-center gap-2">
              <span className="pill bg-rose-50 text-rose-700 border-rose-100">Verified Identity</span>
@@ -292,7 +292,7 @@ export function ProfileExecutive({
 
       <div className="panel border-slate-200 bg-white p-8">
         <div className="mb-8 flex items-center justify-between">
-          <h4 className="font-display text-2xl font-bold text-slate-950">Identity & Operations</h4>
+          <h4 className="break-words font-display text-xl font-bold text-slate-950 sm:text-2xl">Identity & Operations</h4>
           <button className="rounded-full bg-rose-50 px-6 py-2 text-xs font-bold text-rose-700 transition hover:bg-rose-100">Commit Changes</button>
         </div>
 
@@ -332,7 +332,7 @@ export function ProfileExecutive({
                </div>
                <div className="md:col-span-2 space-y-2">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 ml-1">Bank Settlement Details (Confidential)</p>
-                  <div className="flex gap-3">
+                  <div className="flex flex-col gap-3 sm:flex-row">
                      <input 
                        placeholder="Account Number" 
                        type="password"
@@ -340,7 +340,7 @@ export function ProfileExecutive({
                      />
                      <input 
                        placeholder="IFSC / Branch Code" 
-                       className="w-40 rounded-2xl border-slate-100 px-4 py-3.5 text-sm font-bold uppercase"
+                       className="w-full rounded-2xl border-slate-100 px-4 py-3.5 text-sm font-bold uppercase sm:w-40"
                      />
                   </div>
                </div>

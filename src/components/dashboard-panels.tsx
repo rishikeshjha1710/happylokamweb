@@ -506,7 +506,7 @@ function AdminHealthPanel({
     return (
       <div className="rounded-[30px] border border-red-100 bg-white p-8 shadow-[0_20px_70px_rgba(15,23,42,0.06)]">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-red-500">Health telemetry</p>
-        <h3 className="mt-4 font-display text-3xl tracking-tight text-slate-950">Live health feed is temporarily unavailable.</h3>
+        <h3 className="mt-4 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">Live health feed is temporarily unavailable.</h3>
         <p className="mt-3 text-sm leading-7 text-slate-600">{error}</p>
       </div>
     );
@@ -658,7 +658,7 @@ export function UserDashboardView() {
     return (
       <div className="rounded-[30px] border border-red-100 bg-white p-8 shadow-[0_20px_70px_rgba(15,23,42,0.06)] text-center">
         <p className="text-xs font-bold uppercase tracking-[0.24em] text-red-500">Service Interruption</p>
-        <h3 className="mt-4 font-display text-2xl tracking-tight text-slate-950">We're having trouble loading your dashboard.</h3>
+        <h3 className="mt-4 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">We're having trouble loading your dashboard.</h3>
         <p className="mt-3 text-sm text-slate-600">Please check your connection or try again in a moment.</p>
         <button onClick={() => window.location.reload()} className="mt-6 rounded-full bg-slate-950 px-6 py-2 text-sm font-bold text-white">Retry</button>
       </div>
@@ -940,7 +940,7 @@ export function PartnerDashboardView() {
     return (
       <div className="rounded-[30px] border border-red-100 bg-white p-8 shadow-[0_20px_70px_rgba(15,23,42,0.06)] text-center">
         <p className="text-xs font-bold uppercase tracking-[0.24em] text-red-500">Service Interruption</p>
-        <h3 className="mt-4 font-display text-2xl tracking-tight text-slate-950">We're having trouble loading your partner panel.</h3>
+        <h3 className="mt-4 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">We're having trouble loading your partner panel.</h3>
         <p className="mt-3 text-sm text-slate-600">This might be due to a server update or regional connectivity issues.</p>
         <button onClick={() => window.location.reload()} className="mt-6 rounded-full bg-slate-950 px-6 py-2 text-sm font-bold text-white">Retry Refresh</button>
       </div>
@@ -1035,15 +1035,15 @@ export function PartnerDashboardView() {
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="rounded-[24px] border border-slate-200 bg-white p-4">
                   <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Verified profile</p>
-                  <p className="mt-3 font-display text-3xl tracking-tight text-slate-950">{profile?.isVerified ? 'Yes' : 'No'}</p>
+                  <p className="mt-3 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">{profile?.isVerified ? 'Yes' : 'No'}</p>
                 </div>
                 <div className="rounded-[24px] border border-slate-200 bg-white p-4">
                   <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Average order</p>
-                  <p className="mt-3 font-display text-3xl tracking-tight text-slate-950">{formatCurrency(averageOrderValue)}</p>
+                  <p className="mt-3 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">{formatCurrency(averageOrderValue)}</p>
                 </div>
                 <div className="rounded-[24px] border border-slate-200 bg-white p-4">
                   <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Payout pending</p>
-                  <p className="mt-3 font-display text-3xl tracking-tight text-slate-950">{payoutPending.length}</p>
+                  <p className="mt-3 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">{payoutPending.length}</p>
                 </div>
               </div>
               <div className="mt-6">
@@ -1482,7 +1482,7 @@ export function AdminDashboardView() {
     return (
       <div className="rounded-[30px] border border-red-100 bg-white p-8 shadow-[0_20px_70px_rgba(15,23,42,0.06)] text-center">
         <p className="text-xs font-bold uppercase tracking-[0.24em] text-red-500">Service Interruption</p>
-        <h3 className="mt-4 font-display text-2xl tracking-tight text-slate-950">We're having trouble loading the master dashboard.</h3>
+        <h3 className="mt-4 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">We're having trouble loading the master dashboard.</h3>
         <p className="mt-3 text-sm text-slate-600">This might be due to a server update or regional connectivity issues.</p>
         <button onClick={() => window.location.reload()} className="mt-6 rounded-full bg-slate-950 px-6 py-2 text-sm font-bold text-white">Force Refresh</button>
       </div>
@@ -1600,19 +1600,19 @@ export function AdminDashboardView() {
               <div className="grid gap-4 md:grid-cols-4">
                 <div className="rounded-[24px] border border-slate-200 bg-white p-4">
                   <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Pending payouts</p>
-                  <p className="mt-3 font-display text-3xl tracking-tight text-slate-950">{pendingPayouts.length}</p>
+                  <p className="mt-3 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">{pendingPayouts.length}</p>
                 </div>
                 <div className="rounded-[24px] border border-slate-200 bg-white p-4">
                   <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Published services</p>
-                  <p className="mt-3 font-display text-3xl tracking-tight text-slate-950">{scopedServices.filter((service) => service.status === 'PUBLISHED').length}</p>
+                  <p className="mt-3 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">{scopedServices.filter((service) => service.status === 'PUBLISHED').length}</p>
                 </div>
                 <div className="rounded-[24px] border border-slate-200 bg-white p-4">
                   <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Pending bookings</p>
-                  <p className="mt-3 font-display text-3xl tracking-tight text-slate-950">{scopedBookings.filter((booking) => booking.status === 'PENDING').length}</p>
+                  <p className="mt-3 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">{scopedBookings.filter((booking) => booking.status === 'PENDING').length}</p>
                 </div>
                 <div className="rounded-[24px] border border-slate-200 bg-white p-4">
                   <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Revenue throughput</p>
-                  <p className="mt-3 font-display text-3xl tracking-tight text-slate-950">{formatCurrency(scopedBookings.reduce((sum, booking) => sum + booking.totalAmount, 0))}</p>
+                  <p className="mt-3 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">{formatCurrency(scopedBookings.reduce((sum, booking) => sum + booking.totalAmount, 0))}</p>
                 </div>
               </div>
               <div className="mt-6">

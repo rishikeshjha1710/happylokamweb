@@ -147,7 +147,7 @@ export default function HomePage() {
               <Sparkles className="h-3 w-3" />
               Celebrate with ease and joy
             </span>
-            <h1 className="mt-8 max-w-5xl animate-slide-up font-display text-5xl font-bold tracking-tight text-white md:text-8xl">
+            <h1 className="mt-8 max-w-5xl animate-slide-up break-words font-display text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-8xl">
               Enjoy Every <span className="text-rose-600">Moment</span> of your life.
             </h1>
             <p className="mt-8 max-w-2xl animate-slide-up text-lg leading-8 text-white/70 [animation-delay:200ms]">
@@ -221,7 +221,7 @@ export default function HomePage() {
         <div className="grid gap-16 lg:grid-cols-[1fr_0.8fr] lg:items-center">
           <div>
             <span className="pill border-rose-200 bg-white text-rose-700">About Our Mission</span>
-            <h2 className="mt-6 font-display text-4xl tracking-tight text-slate-950 md:text-6xl">
+            <h2 className="mt-6 break-words font-display text-3xl tracking-tight text-slate-950 sm:text-4xl md:text-6xl">
               Helping You Celebrate <span className="text-rose-600">Freedom.</span>
             </h2>
             <p className="mt-6 text-lg leading-8 text-slate-600">
@@ -292,7 +292,7 @@ export default function HomePage() {
             </div>
             <div className="order-1 lg:order-2">
               <span className="pill border-rose-200 bg-white text-rose-700">Legal & Trust</span>
-              <h2 className="mt-6 font-display text-4xl tracking-tight text-slate-950 md:text-5xl">
+              <h2 className="mt-6 break-words font-display text-3xl tracking-tight text-slate-950 sm:text-4xl md:text-5xl">
                 A Registered & <span className="text-rose-600">Verified</span> Company.
               </h2>
               <p className="mt-6 text-lg leading-8 text-slate-600">
@@ -317,7 +317,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center">
             <span className="pill border-rose-200 bg-white text-rose-700">Experience</span>
-            <h2 className="mt-5 font-display text-4xl tracking-tight text-slate-950 md:text-5xl">
+            <h2 className="mt-5 break-words font-display text-3xl tracking-tight text-slate-950 sm:text-4xl md:text-5xl">
               Everyone is <span className="text-rose-600">Welcome.</span>
             </h2>
           </div>
@@ -329,7 +329,7 @@ export default function HomePage() {
                 className={`group rounded-[32px] border border-rose-100 p-8 shadow-[0_22px_70px_rgba(225,29,72,0.08)] transition-all hover:-translate-y-2 hover:shadow-[0_30px_100px_rgba(225,29,72,0.14)] ${journey.accent}`}
               >
                 <p className="text-xs font-bold uppercase tracking-[0.24em] text-rose-500">{journey.title}</p>
-                <h3 className="mt-6 font-display text-3xl tracking-tight text-slate-950">{journey.title} Hub</h3>
+                <h3 className="mt-6 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">{journey.title} Hub</h3>
                 <p className="mt-4 text-base leading-7 text-slate-600">{journey.copy}</p>
                 <Link href={journey.href} className="mt-10 inline-flex items-center gap-2 rounded-full bg-slate-950 px-6 py-2 text-sm font-bold text-white transition hover:bg-slate-800">
                   {journey.action}

@@ -62,7 +62,7 @@ export function RoleGate({ requiredRole, children }: RoleGateProps) {
       <section className="mx-auto max-w-7xl px-6 py-16">
         <div className="panel flex min-h-[320px] flex-col items-center justify-center text-center">
           <span className="pill">{status === 'checking' ? 'Preparing workspace' : 'Redirecting securely'}</span>
-          <h1 className="mt-5 font-display text-3xl tracking-tight text-slate-950 md:text-4xl">
+          <h1 className="mt-5 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl md:text-4xl">
             Opening the right control surface for your account.
           </h1>
           <p className="mt-4 max-w-xl text-sm leading-7 text-slate-600">

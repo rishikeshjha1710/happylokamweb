@@ -133,7 +133,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20">
         <div className="panel flex min-h-[420px] flex-col items-center justify-center text-center">
           <span className="pill">Preparing your experience</span>
-          <h1 className="mt-5 font-display text-3xl tracking-tight text-slate-950 md:text-4xl">
+          <h1 className="mt-5 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl md:text-4xl">
             Checking your safe workspace.
           </h1>
           <p className="mt-4 max-w-xl text-sm leading-7 text-slate-600">
@@ -177,7 +177,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                   ? 'Partner Membership'
                   : 'User Membership'}
             </span>
-            <h1 className="mt-8 font-display text-4xl tracking-tight leading-[1.1] md:text-6xl">
+            <h1 className="mt-8 break-words font-display text-3xl tracking-tight leading-[1.08] sm:text-4xl md:text-6xl">
               {mode === 'login'
                 ? form.role === 'ADMIN'
                   ? 'Access the protected admin control center.'
@@ -224,7 +224,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                   ? 'Partner Onboarding'
                   : 'User Onboarding'}
             </p>
-            <h2 className="mt-4 font-display text-4xl tracking-tight text-slate-950">
+            <h2 className="mt-4 break-words font-display text-3xl tracking-tight text-slate-950 sm:text-4xl">
               {mode === 'login'
                 ? form.role === 'ADMIN'
                   ? 'Admin panel login'

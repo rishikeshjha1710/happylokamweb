@@ -149,7 +149,7 @@ function ToolSection({ eyebrow, title, copy }: { eyebrow: string; title: string;
   return (
     <div className="mb-5">
       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-rose-700">{eyebrow}</p>
-      <h3 className="mt-3 font-display text-3xl tracking-tight text-slate-950">{title}</h3>
+      <h3 className="mt-3 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">{title}</h3>
       <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">{copy}</p>
     </div>
   );
@@ -218,7 +218,7 @@ export function AdminPartnerOnboardingManager() {
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
         <div className="rounded-[28px] border border-slate-200 bg-slate-950 p-6 text-white">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-rose-200/80">Live capacity</p>
-          <p className="mt-4 font-display text-4xl tracking-tight">{data?.adminVendors?.length ?? 0}</p>
+          <p className="mt-4 break-words font-display text-3xl tracking-tight sm:text-4xl">{data?.adminVendors?.length ?? 0}</p>
           <p className="mt-3 text-sm leading-7 text-white/72">Approved vendors onboarded into the marketplace and ready for admin oversight.</p>
           <div className="mt-6 space-y-3">
             {recentPartners.map((vendor) => (
@@ -549,7 +549,7 @@ export function AdminServicesManager() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-rose-700">{selectedServiceId ? 'Edit listing' : 'New listing'}</p>
-              <h4 className="mt-2 font-display text-2xl tracking-tight text-slate-950">
+              <h4 className="mt-2 break-words font-display text-xl tracking-tight text-slate-950 sm:text-2xl">
                 {selectedServiceId ? 'Adjust partner service details' : 'Create a partner service'}
               </h4>
             </div>
@@ -696,7 +696,7 @@ export function AdminServicesManager() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-rose-200/78">Live inventory</p>
-              <h4 className="mt-2 font-display text-2xl tracking-tight">Marketplace services</h4>
+              <h4 className="mt-2 break-words font-display text-xl tracking-tight sm:text-2xl">Marketplace services</h4>
             </div>
             <div className="flex flex-wrap gap-2">
               {(['ALL', 'DRAFT', 'PUBLISHED', 'ARCHIVED'] as const).map((value) => (

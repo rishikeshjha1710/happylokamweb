@@ -39,7 +39,7 @@ export default function HowToWhatIsPage() {
             <Sparkles className="h-4 w-4" />
             Everything you need to know
           </span>
-          <h1 className="mt-8 font-display text-5xl font-bold tracking-tight md:text-8xl">
+          <h1 className="mt-8 break-words font-display text-4xl font-bold tracking-tight sm:text-5xl md:text-8xl">
             The Art of <span className="text-rose-600">Celebration.</span>
           </h1>
           <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-white/70">
@@ -53,7 +53,7 @@ export default function HowToWhatIsPage() {
         <div className="grid gap-20 lg:grid-cols-2 lg:items-center">
           <div>
             <span className="pill">The Philosophy</span>
-            <h2 className="mt-6 font-display text-4xl tracking-tight text-slate-950 md:text-5xl">
+            <h2 className="mt-6 break-words font-display text-3xl tracking-tight text-slate-950 sm:text-4xl md:text-5xl">
               How it <span className="text-rose-600">Works.</span>
             </h2>
             <p className="mt-6 text-lg leading-8 text-slate-600">
@@ -94,7 +94,7 @@ export default function HowToWhatIsPage() {
           <div className="grid gap-6">
             <div className="panel bg-rose-50 border-rose-100 p-8 md:p-12">
                <HelpCircle className="h-10 w-10 text-rose-600" />
-               <h3 className="mt-6 font-display text-3xl text-slate-950">Why Happylokam?</h3>
+               <h3 className="mt-6 break-words font-display text-2xl text-slate-950 sm:text-3xl">Why Happylokam?</h3>
                <p className="mt-4 text-slate-600 leading-8">
                  Because your family's happiness is too precious to leave to chance. We believe that festivals and functions are the soul of our culture. By providing a safe, verified, and premium platform, we protect that soul. 
                  <br/><br/>
@@ -114,7 +114,7 @@ export default function HowToWhatIsPage() {
         <div className="mx-auto max-w-3xl px-6">
           <div className="text-center mb-16">
             <span className="pill">The Big Questions</span>
-            <h2 className="mt-6 font-display text-4xl tracking-tight text-slate-950 md:text-5xl">
+            <h2 className="mt-6 break-words font-display text-3xl tracking-tight text-slate-950 sm:text-4xl md:text-5xl">
               Common <span className="text-rose-600">Curiosities.</span>
             </h2>
           </div>
@@ -132,7 +132,7 @@ export default function HowToWhatIsPage() {
             <div className="inline-flex flex-col items-center gap-6 rounded-[40px] border border-rose-100 bg-white p-12 shadow-2xl">
                <ShieldCheck className="h-16 w-16 text-rose-600" />
                <div>
-                  <h3 className="font-display text-3xl text-slate-950">Still Have Questions?</h3>
+                  <h3 className="break-words font-display text-2xl text-slate-950 sm:text-3xl">Still Have Questions?</h3>
                   <p className="mt-3 text-slate-600">Our concierge team is always here to guide you through your celebration journey.</p>
                </div>
                <Link href="/#about" className="rounded-full bg-slate-950 px-10 py-4 text-sm font-bold text-white transition hover:bg-slate-800">

@@ -461,13 +461,36 @@ export function ProfileSettingsCard() {
     }
 
     try {
-      const image = await fileToDataUrl(file, 2);
+      const image = await fileToDataUrl(file, 24);
       setForm((current) => ({ ...current, avatarUrl: image }));
-      setMessage('Profile photo selected. Save changes to update the database.');
+      await updateProfile({
+        variables: {
+          input: {
+            avatarUrl: image
+          }
+        }
+      });
+      setMessage('Profile photo uploaded and saved to the database.');
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Profile photo upload failed.');
     } finally {
       event.target.value = '';
+    }
+  }
+
+  async function handleAvatarClear() {
+    try {
+      setForm((current) => ({ ...current, avatarUrl: '' }));
+      await updateProfile({
+        variables: {
+          input: {
+            avatarUrl: null
+          }
+        }
+      });
+      setMessage('Profile photo removed from the database.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Profile photo remove failed.');
     }
   }
 
@@ -496,15 +519,15 @@ export function ProfileSettingsCard() {
       <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
         <div className="rounded-[30px] bg-slate-950 p-6 text-white shadow-[0_24px_80px_rgba(15,23,42,0.22)]">
           <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-rose-300">User profile</p>
-          <h2 className="mt-4 font-display text-4xl tracking-tight text-white">
+          <h2 className="mt-4 break-words font-display text-3xl tracking-tight text-white sm:text-4xl">
             A polished profile that stays in sync with your bookings.
           </h2>
           <p className="mt-4 text-sm leading-7 text-white/70">
             Upload a profile image, update your identity details, and keep the account profile stored in the database so it stays available after reload.
           </p>
 
-          <div className="mt-8 flex items-center gap-4 rounded-[28px] border border-white/10 bg-white/8 p-4">
-            <div className="relative h-24 w-24 overflow-hidden rounded-[28px] border border-white/10 bg-white/10">
+          <div className="mt-8 flex flex-col gap-4 rounded-[28px] border border-white/10 bg-white/8 p-4 sm:flex-row sm:items-center">
+            <div className="relative h-20 w-20 overflow-hidden rounded-[28px] border border-white/10 bg-white/10 sm:h-24 sm:w-24">
               <MarketplaceImage
                 src={form.avatarUrl || data?.me?.avatarUrl}
                 alt={form.fullName || data?.me?.fullName || 'User profile'}
@@ -514,7 +537,7 @@ export function ProfileSettingsCard() {
               />
             </div>
             <div className="min-w-0">
-              <p className="truncate font-display text-2xl font-bold text-white">{form.fullName || data?.me?.fullName || 'Your profile'}</p>
+              <p className="break-words font-display text-xl font-bold text-white sm:text-2xl">{form.fullName || data?.me?.fullName || 'Your profile'}</p>
               <p className="mt-1 truncate text-sm text-white/70">{data?.me?.email ?? 'No email available'}</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 <span className="pill border border-white/10 bg-white/10 text-white">{data?.me?.role ?? 'USER'}</span>
@@ -539,7 +562,7 @@ export function ProfileSettingsCard() {
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-rose-500">Edit profile</p>
-              <h3 className="mt-3 font-display text-3xl tracking-tight text-slate-950">Refine your account details</h3>
+              <h3 className="mt-3 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">Refine your account details</h3>
             </div>
             <span className="rounded-full border border-rose-100 bg-rose-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-rose-600">
               Database backed
@@ -553,7 +576,7 @@ export function ProfileSettingsCard() {
               imageUrl={form.avatarUrl || data?.me?.avatarUrl}
               fallbackTitle={form.fullName || data?.me?.fullName || 'User profile'}
               onUpload={handleAvatarUpload}
-              onClear={() => setForm((current) => ({ ...current, avatarUrl: '' }))}
+              onClear={handleAvatarClear}
             />
           </div>
 
@@ -1312,7 +1335,7 @@ By clicking 'Accept & Continue', you agree to these legal terms as updated by th
         <div className="flex flex-wrap items-center justify-between gap-6 border-b border-rose-50 pb-8">
           <div>
             <span className="pill">Service Studio</span>
-            <h2 className="mt-4 font-display text-4xl tracking-tight text-slate-950">Draft your <span className="text-rose-600">Masterpiece.</span></h2>
+            <h2 className="mt-4 break-words font-display text-3xl tracking-tight text-slate-950 sm:text-4xl">Draft your <span className="text-rose-600">Masterpiece.</span></h2>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
               Create a modern listing that attracts high-value bookings. Be specific about your products, pricing, and operational capacity.
             </p>
@@ -1326,7 +1349,7 @@ By clicking 'Accept & Continue', you agree to these legal terms as updated by th
           <div className="space-y-6">
             <ServiceImagePreview title={form.title || 'Service Preview'} imageUrl={form.coverImageUrl} />
             <div className="rounded-3xl border border-rose-100 bg-rose-50/20 p-6">
-                 <h4 className="font-display text-lg font-bold text-slate-900">Partner Details (Optional)</h4>
+                 <h4 className="break-words font-display text-base font-bold text-slate-900 sm:text-lg">Partner Details (Optional)</h4>
                  <div className="mt-4 space-y-3">
                     <input
                       value={form.partnerName}
@@ -1334,7 +1357,7 @@ By clicking 'Accept & Continue', you agree to these legal terms as updated by th
                       placeholder="Individual or representative name"
                       className="w-full rounded-2xl border border-rose-100 bg-white px-4 py-3 text-sm"
                     />
-                    <div className="grid gap-3 grid-cols-2">
+                    <div className="grid gap-3 sm:grid-cols-2">
                         <input
                             value={form.phone}
                             onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
@@ -1722,7 +1745,7 @@ export function PartnerAvailabilityManager({ availability }: PartnerAvailability
 
   return (
     <div className="panel">
-      <h2 className="font-display text-3xl tracking-tight text-slate-950">Availability Registry</h2>
+      <h2 className="break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">Availability Registry</h2>
       <p className="mt-3 text-sm leading-6 text-slate-600">
         Manage your active schedule for bookings. Enter slots using the professional format: `ISO_START | ISO_END | Service Label`.
       </p>
@@ -1792,13 +1815,36 @@ export function PartnerProfileManager({ profile }: PartnerProfileManagerProps) {
     }
 
     try {
-      const image = await fileToDataUrl(file, 2);
+      const image = await fileToDataUrl(file, 24);
       setForm((current) => ({ ...current, avatarUrl: image }));
-      setMessage('Partner image selected. Save changes to update the database.');
+      await updateVendorProfile({
+        variables: {
+          input: {
+            avatarUrl: image
+          }
+        }
+      });
+      setMessage('Partner image uploaded and saved to the database.');
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Partner image upload failed.');
     } finally {
       event.target.value = '';
+    }
+  }
+
+  async function handleAvatarClear() {
+    try {
+      setForm((current) => ({ ...current, avatarUrl: '' }));
+      await updateVendorProfile({
+        variables: {
+          input: {
+            avatarUrl: null
+          }
+        }
+      });
+      setMessage('Partner image removed from the database.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Partner image remove failed.');
     }
   }
 
@@ -1828,15 +1874,15 @@ export function PartnerProfileManager({ profile }: PartnerProfileManagerProps) {
       <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
         <div className="rounded-[30px] bg-slate-950 p-6 text-white shadow-[0_24px_80px_rgba(15,23,42,0.24)]">
           <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-rose-300">Partner profile</p>
-          <h2 className="mt-4 font-display text-4xl tracking-tight text-white">
+          <h2 className="mt-4 break-words font-display text-3xl tracking-tight text-white sm:text-4xl">
             Commercial identity built for trust, reviews, and bookings.
           </h2>
           <p className="mt-4 text-sm leading-7 text-white/70">
             Keep your business image, city, and description current. The uploaded profile photo or portrait is stored directly in the database and reloads with the profile.
           </p>
 
-          <div className="mt-8 flex items-center gap-4 rounded-[28px] border border-white/10 bg-white/8 p-4">
-            <div className="relative h-24 w-24 overflow-hidden rounded-[28px] border border-white/10 bg-white/10">
+          <div className="mt-8 flex flex-col gap-4 rounded-[28px] border border-white/10 bg-white/8 p-4 sm:flex-row sm:items-center">
+            <div className="relative h-20 w-20 overflow-hidden rounded-[28px] border border-white/10 bg-white/10 sm:h-24 sm:w-24">
               <MarketplaceImage
                 src={form.avatarUrl || profile.avatarUrl}
                 alt={form.businessName || profile.businessName || 'Partner profile'}
@@ -1846,7 +1892,7 @@ export function PartnerProfileManager({ profile }: PartnerProfileManagerProps) {
               />
             </div>
             <div className="min-w-0">
-              <p className="truncate font-display text-2xl font-bold text-white">{form.businessName || profile.businessName || 'Partner profile'}</p>
+              <p className="break-words font-display text-xl font-bold text-white sm:text-2xl">{form.businessName || profile.businessName || 'Partner profile'}</p>
               <p className="mt-1 truncate text-sm text-white/70">
                 {profile.city}{profile.state ? `, ${profile.state}` : ''}
               </p>
@@ -1873,7 +1919,7 @@ export function PartnerProfileManager({ profile }: PartnerProfileManagerProps) {
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-rose-500">Commercial Identity</p>
-              <h3 className="mt-3 font-display text-3xl tracking-tight text-slate-950">Update your partner profile</h3>
+              <h3 className="mt-3 break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">Update your partner profile</h3>
             </div>
             <span className="rounded-full border border-rose-100 bg-rose-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-rose-600">
               Live database profile
@@ -1887,7 +1933,7 @@ export function PartnerProfileManager({ profile }: PartnerProfileManagerProps) {
               imageUrl={form.avatarUrl || profile.avatarUrl}
               fallbackTitle={form.businessName || profile.businessName || 'Partner profile'}
               onUpload={handleAvatarUpload}
-              onClear={() => setForm((current) => ({ ...current, avatarUrl: '' }))}
+              onClear={handleAvatarClear}
             />
           </div>
 
@@ -1956,7 +2002,7 @@ export function PartnerPayoutManager({ bookings }: PartnerPayoutManagerProps) {
 
   return (
     <div className="panel">
-      <h2 className="font-display text-3xl tracking-tight text-slate-950">Treasury & Settlements</h2>
+      <h2 className="break-words font-display text-2xl tracking-tight text-slate-950 sm:text-3xl">Treasury & Settlements</h2>
       <div className="mt-6 space-y-3">
         {eligible.length ? (
           eligible.map((booking) => <PartnerPayoutCard key={booking.id} booking={booking} />)
@@ -2073,7 +2119,7 @@ export function AdminUsersManager() {
   return (
     <div className="panel overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h2 className="font-display text-3xl tracking-tight">Manage users</h2>
+        <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">Manage users</h2>
         {selectedCount > 0 && (
           <div className="flex items-center gap-3 rounded-2xl bg-slate-950 px-4 py-2 text-white animate-in fade-in slide-in-from-top-2">
             <span className="text-xs font-bold uppercase tracking-widest">{selectedCount} selected</span>
@@ -2279,7 +2325,7 @@ export function AdminVendorsManager() {
   return (
     <div className="panel overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h2 className="font-display text-3xl tracking-tight">Approve vendors</h2>
+        <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">Approve vendors</h2>
         {selectedCount > 0 && (
           <div className="flex items-center gap-3 rounded-2xl bg-slate-950 px-4 py-2 text-white animate-in fade-in slide-in-from-top-2">
             <span className="text-xs font-bold uppercase tracking-widest">{selectedCount} selected</span>
@@ -2411,7 +2457,7 @@ type AdminBookingsManagerProps = {
 export function AdminBookingsManager({ bookings }: AdminBookingsManagerProps) {
   return (
     <div className="panel">
-      <h2 className="font-display text-3xl tracking-tight">Manage bookings</h2>
+      <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">Manage bookings</h2>
       <div className="mt-6 space-y-3">
         {bookings.length ? (
           bookings.map((booking) => <AdminBookingCard key={booking.id} booking={booking} />)
@@ -2459,7 +2505,7 @@ function AdminBookingCard({ booking }: { booking: AdminBookingsManagerProps['boo
             {booking.venue} - Rs. {booking.totalAmount.toLocaleString('en-IN')}
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <select value={status} onChange={(event) => setStatus(event.target.value)} className="rounded-2xl border border-rose-100 px-4 py-3 text-sm">
             {['PENDING', 'CONFIRMED', 'REJECTED', 'RESCHEDULED', 'COMPLETED', 'CANCELLED'].map((value) => (
               <option key={value} value={value}>
@@ -2489,7 +2535,7 @@ export function AdminPaymentsManager() {
 
   return (
     <div className="panel">
-      <h2 className="font-display text-3xl tracking-tight">Payments and payouts</h2>
+      <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">Payments and payouts</h2>
       <div className="mt-6 space-y-3">
         {(data?.adminPayments ?? []).map((payment: { id: string; amount: number; status: string; payoutStatus: string }) => (
           <AdminPaymentCard key={payment.id} payment={payment} />
@@ -2594,7 +2640,7 @@ export function AdminCmsManager() {
 
   return (
     <div className="panel">
-      <h2 className="font-display text-3xl tracking-tight">CMS manager</h2>
+      <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">CMS manager</h2>
       <div className="mt-6 grid gap-3">
         <div className="flex flex-wrap gap-2">
           {(data?.adminCmsPages ?? []).map((page: any) => (
@@ -2758,7 +2804,7 @@ export function AdminAuditLogManager() {
   if (!usersData || !vendorsData || !bookingsData || !paymentsData) {
     return (
       <div className="panel overflow-hidden">
-        <h2 className="font-display text-3xl tracking-tight">Audit log</h2>
+        <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">Audit log</h2>
         <div className="mt-6 flex flex-col gap-3">
           <Skeleton className="h-20 w-full" />
           <Skeleton className="h-20 w-full" />
@@ -2770,7 +2816,7 @@ export function AdminAuditLogManager() {
 
   return (
     <div className="panel overflow-hidden">
-      <h2 className="font-display text-3xl tracking-tight">Audit log</h2>
+      <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">Audit log</h2>
       <div className="mt-6 flex flex-col gap-3">
         {logs.map((log) => (
           <div key={log.id} className="flex items-center justify-between gap-4 rounded-2xl border border-slate-100 px-4 py-3">
@@ -2794,7 +2840,7 @@ export function VendorReviewManager() {
   return (
     <div className="panel">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h2 className="font-display text-3xl tracking-tight">Review center</h2>
+      <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">Review center</h2>
         <span className="rounded-full bg-rose-50 px-3 py-1 text-xs font-bold uppercase tracking-widest text-rose-600">
           {bookingsWithReviews.length} reviews
         </span>

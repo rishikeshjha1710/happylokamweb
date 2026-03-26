@@ -128,7 +128,7 @@ export function isDataImage(src: string | null | undefined) {
   return typeof src === 'string' && src.startsWith('data:image/');
 }
 
-export async function fileToDataUrl(file: File, maxSizeMb = 4) {
+export async function fileToDataUrl(file: File, maxSizeMb = 24) {
   if (!file.type.startsWith('image/')) {
     throw new Error('Please upload a valid image file.');
   }
@@ -141,10 +141,18 @@ export async function fileToDataUrl(file: File, maxSizeMb = 4) {
     return readFileAsDataUrl(file);
   }
 
-  return optimizeRasterImage(file, 900 * 1024);
+  try {
+    return await optimizeRasterImage(file, 1200 * 1024);
+  } catch (error) {
+    if (file.size <= 4 * 1024 * 1024) {
+      return readFileAsDataUrl(file);
+    }
+
+    throw error instanceof Error ? error : new Error('Unable to optimize the selected image.');
+  }
 }
 
-export async function filesToDataUrls(files: FileList | File[], maxFiles = 6, maxSizeMb = 4) {
+export async function filesToDataUrls(files: FileList | File[], maxFiles = 6, maxSizeMb = 24) {
   const items = Array.from(files).slice(0, maxFiles);
   return Promise.all(items.map((file) => fileToDataUrl(file, maxSizeMb)));
 }
