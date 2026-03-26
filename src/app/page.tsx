@@ -7,43 +7,43 @@ import { PublicServiceGrid } from '@/components/public-service-grid';
 const siteOrigin = process.env.NEXT_PUBLIC_SITE_ORIGIN?.trim() || 'https://happylokam.com';
 
 export const metadata: Metadata = {
-  title: 'Happylokam | Event Booking, Celebration Planning, and Partner Marketplace',
+  title: 'happylokam | Celebration Booking, Planning, and Partner Marketplace',
   description:
-    'Discover trusted celebration partners, browse premium event services, and book faster with Happylokam.',
+    'Discover trusted celebration partners, browse premium celebration services, and book faster with happylokam.',
   keywords: [
-    'Happylokam',
-    'event booking',
+    'happylokam',
+    'celebration booking',
     'celebration planning',
     'party vendors',
     'wedding services',
     'partner marketplace',
-    'event management',
+    'celebration management',
     'secure bookings'
   ],
   alternates: {
     canonical: '/'
   },
   openGraph: {
-    title: 'Happylokam | Event Booking and Celebration Planning',
+    title: 'happylokam | Celebration Booking and Planning',
     description:
-      'Discover trusted celebration partners, browse premium event services, and book faster with Happylokam.',
+    'Discover trusted celebration partners, browse premium celebration services, and book faster with happylokam.',
     url: siteOrigin,
-    siteName: 'Happylokam',
+    siteName: 'happylokam',
     type: 'website',
     images: [
       {
         url: '/og-image.svg',
         width: 1200,
         height: 630,
-        alt: 'Happylokam event booking platform'
+        alt: 'happylokam celebration booking platform'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Happylokam | Event Booking, Celebration Planning, and Partner Marketplace',
+    title: 'happylokam | Celebration Booking, Planning, and Partner Marketplace',
     description:
-      'Discover trusted celebration partners, browse premium event services, and book faster with Happylokam.',
+    'Discover trusted celebration partners, browse premium celebration services, and book faster with happylokam.',
     images: ['/og-image.svg']
   }
 };
@@ -102,16 +102,16 @@ export default function HomePage() {
     {
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      name: 'Happylokam',
+      name: 'happylokam',
       url: siteOrigin,
       logo: `${siteOrigin}/favicon.svg`,
       description:
-        'Premium event booking and celebration platform for users, partners, and admins with fast discovery and secure bookings.'
+        'Premium celebration booking and planning platform for users, partners, and admins with fast discovery and secure bookings.'
     },
     {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      name: 'Happylokam',
+      name: 'happylokam',
       url: siteOrigin,
       potentialAction: {
         '@type': 'SearchAction',
@@ -225,10 +225,10 @@ export default function HomePage() {
               Helping You Celebrate <span className="text-rose-600">Freedom.</span>
             </h2>
             <p className="mt-6 text-lg leading-8 text-slate-600">
-              At Happylokam, our mission is to ensure that no family struggles to plan their moments of joy. We believe that festivals and family functions are for making memories, not managing stress.
+              At happylokam, our mission is to ensure that no family struggles to plan their moments of joy. We believe that festivals and family functions are for making memories, not managing stress.
             </p>
             <p className="mt-4 text-lg leading-8 text-slate-600">
-              By connecting you with <strong className="font-semibold text-rose-700">verified partners</strong>, we guarantee quality, speed, and reliability for every event you plan on the platform.
+              By connecting you with <strong className="font-semibold text-rose-700">verified partners</strong>, we guarantee quality, speed, and reliability for every celebration you plan on the platform.
             </p>
             
             <div className="mt-10 grid gap-6 md:grid-cols-2">
@@ -296,7 +296,7 @@ export default function HomePage() {
                 A Registered & <span className="text-rose-600">Verified</span> Company.
               </h2>
               <p className="mt-6 text-lg leading-8 text-slate-600">
-                Happylokam is a legally working entity, registered in the year <strong className="font-semibold text-slate-900">2026</strong> and <strong className="font-semibold text-rose-700">verified by MCA</strong>. We pride ourselves on transparency and legal integrity.
+                happylokam is a legally working entity, registered in the year <strong className="font-semibold text-slate-900">2026</strong> and <strong className="font-semibold text-rose-700">verified by MCA</strong>. We pride ourselves on transparency and legal integrity.
               </p>
               <div className="mt-8 flex items-start gap-4 rounded-3xl border border-rose-100 bg-white p-6 shadow-sm">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-rose-50 text-rose-600">

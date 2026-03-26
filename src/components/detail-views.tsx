@@ -108,7 +108,7 @@ export function ServiceDetailView({ slug }: { slug: string }) {
                 <h2 className="mt-3 break-words font-display text-2xl tracking-tight sm:text-3xl">{service.vendor.businessName}</h2>
               </div>
             </div>
-            <p className="mt-4 text-sm text-slate-600">{service.vendor.description ?? 'Verified partner on Happylokam.'}</p>
+            <p className="mt-4 text-sm text-slate-600">{service.vendor.description ?? 'Verified partner on happylokam.'}</p>
             <div className="mt-6 grid gap-4">
               <div className="rounded-[24px] bg-rose-50 p-5">
                 <p className="text-xs uppercase tracking-[0.2em] text-rose-500">Location</p>
@@ -189,7 +189,7 @@ export function PartnerDetailView({ vendorId }: { vendorId: string }) {
               <h1 className="mt-3 break-words font-display text-3xl tracking-tight text-slate-950 sm:text-4xl md:text-6xl">{vendor.businessName}</h1>
             </div>
           </div>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">{vendor.description ?? 'Premium event production and hospitality partner.'}</p>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">{vendor.description ?? 'Premium celebration production and hospitality partner.'}</p>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             <div className="stat-tile">
               <p className="text-xs uppercase tracking-[0.2em] text-rose-500">Location</p>

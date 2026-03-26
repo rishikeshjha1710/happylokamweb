@@ -28,8 +28,8 @@ const socialLinks = [
 function BrandMark({ compact = false }: { compact?: boolean }) {
   return (
     <div className="flex flex-col">
-      <p className="font-display text-xl font-black tracking-tight text-rose-600 md:text-2xl">Happylokam</p>
-      {!compact ? <p className="text-[10px] font-bold uppercase tracking-[0.38em] text-rose-500">Premium Event Network</p> : null}
+      <p className="font-display text-xl font-black italic tracking-tight text-rose-600 md:text-2xl">happylokam</p>
+      {!compact ? <p className="text-[10px] font-bold uppercase tracking-[0.38em] text-rose-500">Premium Celebration Network</p> : null}
     </div>
   );
 }
@@ -240,7 +240,7 @@ export function SiteShell({ children }: PropsWithChildren) {
           </div>
           <div className="mt-20 border-t border-rose-50 pt-8 text-center sm:text-left">
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-slate-400">
-              &copy; 2026 Happylokam Pvt Ltd. Making Celebrations Beautiful.
+              &copy; 2026 happylokam Pvt Ltd. Making Celebrations Beautiful.
             </p>
           </div>
         </div>

@@ -695,7 +695,7 @@ export function UserDashboardView() {
             <MetricCard
               label="Wishlist depth"
               value={String(wishlist.length)}
-              hint="Saved ideas that let you compare vendors before confirming the event."
+              hint="Saved ideas that let you compare vendors before confirming the celebration."
               accent="bg-fuchsia-100 text-fuchsia-700"
               icon={<Heart className="h-6 w-6" />}
             />
@@ -718,8 +718,8 @@ export function UserDashboardView() {
 
           <div className="grid gap-6 xl:grid-cols-[0.92fr_1.08fr]">
             <InsightPanel
-              eyebrow="Next event"
-              title={nextBooking ? nextBooking.service.title : 'Your next confirmed event will appear here.'}
+              eyebrow="Next celebration"
+              title={nextBooking ? nextBooking.service.title : 'Your next confirmed celebration will appear here.'}
               copy={
                 nextBooking
                   ? `${new Date(nextBooking.eventDate).toLocaleDateString('en-IN')} • ${nextBooking.venue} • ${formatCurrency(nextBooking.totalAmount)}`
@@ -735,7 +735,7 @@ export function UserDashboardView() {
                   {paidBookings.length} paid orders
                 </span>
                 <span className="rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
-                  {completedBookings.length} completed events
+                  {completedBookings.length} completed celebrations
                 </span>
               </div>
             </InsightPanel>
@@ -1624,7 +1624,7 @@ export function AdminDashboardView() {
                 />
               </div>
             </InsightPanel>
-            <InsightPanel eyebrow="Activity stream" title="Recent platform events.">
+            <InsightPanel eyebrow="Activity stream" title="Recent platform activity.">
               <AdminActivityStream />
             </InsightPanel>
             <ActivityTimeline title="Active order watchlist" items={activeOrderTimeline} />

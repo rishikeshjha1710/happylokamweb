@@ -42,7 +42,7 @@ const adminLinks: SidebarLink[] = [
   { label: 'Market Bookings', href: '/dashboard/admin?tab=bookings', icon: ClipboardList },
   { label: 'Payment Ledger', href: '/dashboard/admin?tab=payments', icon: CreditCard },
   { label: 'CMS Engine', href: '/dashboard/admin?tab=cms', icon: FileText },
-  { label: 'Audit Logs', href: '/dashboard/admin?tab=audit', icon: History },
+  { label: 'Partner Logs', href: '/dashboard/admin?tab=audit', icon: History },
   { label: 'Platform Health', href: '/dashboard/admin?tab=health', icon: Activity }
 ];
 

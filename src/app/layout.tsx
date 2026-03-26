@@ -19,20 +19,20 @@ const displayFont = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Happylokam',
-    template: '%s | Happylokam'
+    default: 'happylokam',
+    template: '%s | happylokam'
   },
   description:
-    'Happylokam is a premium event booking and celebration platform for users, partners, and admins with fast discovery, secure bookings, and polished dashboards.',
-  applicationName: 'Happylokam',
+    'happylokam is a premium celebration platform for users, partners, and admins with fast discovery, secure bookings, and polished dashboards.',
+  applicationName: 'happylokam',
   keywords: [
-    'Happylokam',
-    'event booking platform',
+    'happylokam',
+    'celebration booking platform',
     'celebration planning',
     'vendor marketplace',
     'wedding services',
     'party booking',
-    'event management',
+    'celebration management',
     'secure bookings',
     'partner dashboard',
     'admin dashboard'
@@ -59,26 +59,26 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.webmanifest',
   openGraph: {
-    title: 'Happylokam',
+    title: 'happylokam',
     description:
-      'Secure event discovery, booking, vendor operations, and admin control in one premium celebration platform.',
+      'Secure celebration discovery, booking, vendor operations, and admin control in one premium celebration platform.',
     type: 'website',
     url: siteOrigin,
-    siteName: 'Happylokam',
+    siteName: 'happylokam',
     images: [
       {
         url: '/og-image.svg',
         width: 1200,
         height: 630,
-        alt: 'Happylokam - Premium event booking platform'
+        alt: 'happylokam - Premium celebration platform'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Happylokam',
+    title: 'happylokam',
     description:
-      'Premium event booking and celebration platform for users, partners, and admins with fast discovery and secure bookings.',
+      'Premium celebration platform for users, partners, and admins with fast discovery and secure bookings.',
     images: ['/og-image.svg']
   }
 };

@@ -198,7 +198,7 @@ export function GlobalControls({
 
       <div className="h-8 w-px bg-slate-200 hidden md:block" />
 
-      <div className="flex w-full items-center gap-1 overflow-x-auto pb-1 md:pb-0">
+      <div className="flex w-full flex-wrap items-center gap-1 pb-1 md:pb-0">
         {['ALL', ...statuses].map((status) => (
           <button
             key={status}
@@ -351,7 +351,7 @@ export function ProfileExecutive({
              <div className="md:col-span-2 space-y-2 pt-4 border-t border-slate-50">
                 <p className="text-sm font-medium text-slate-600">Preferences & Celebration Profile</p>
                 <div className="mt-4 flex flex-wrap gap-2">
-                   {['Weddings', 'Birthdays', 'Corporate Events', 'Festivals'].map(tag => (
+                   {['Weddings', 'Birthdays', 'Corporate Celebrations', 'Festivals'].map(tag => (
                      <span key={tag} className="rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-700 cursor-pointer hover:bg-rose-50 hover:text-rose-600 transition-all">{tag}</span>
                    ))}
                    <button className="rounded-full border border-dashed border-slate-300 px-4 py-2 text-xs font-bold text-slate-400 hover:border-rose-400 hover:text-rose-500">+ Add Interest</button>

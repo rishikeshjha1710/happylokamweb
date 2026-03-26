@@ -143,7 +143,7 @@ function ProfileImageField({
             {imageUrl ? 'Uploaded photo saved to database.' : 'No photo uploaded yet.'}
           </p>
           <p className="max-w-xl text-sm leading-6 text-slate-600">
-            Upload a clear profile photo or brand image. Happylokam compresses the file and stores it in the database so it remains available after reload.
+            Upload a clear profile photo or brand image. happylokam compresses the file and stores it in the database so it remains available after reload.
           </p>
           <div className="flex flex-wrap items-center gap-3">
             <label
@@ -1310,13 +1310,13 @@ export function PartnerServiceStudio({ showExistingServices = true }: { showExis
   }
 
   const termsContent = `
-        Happylokam Partner Service Guidelines (2026):
+        happylokam Partner Service Guidelines (2026):
 
 1. Accuracy: You must provide genuine information about your services and pricing.
 2. Legality: All services must comply with national regulations and MCA guidelines.
 3. Quality: Partners are expected to maintain professional standards for every booking.
 4. Transparency: Any additional charges must be disclosed upfront to the user.
-        5. Protection: Happylokam protects both users and partners through verified protocols.
+5. Protection: happylokam protects both users and partners through verified protocols.
 
 By clicking 'Accept & Continue', you agree to these legal terms as updated by the Administrator.
   `;
@@ -2804,7 +2804,7 @@ export function AdminAuditLogManager() {
   if (!usersData || !vendorsData || !bookingsData || !paymentsData) {
     return (
       <div className="panel overflow-hidden">
-        <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">Audit log</h2>
+        <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">Partner logs & approvals</h2>
         <div className="mt-6 flex flex-col gap-3">
           <Skeleton className="h-20 w-full" />
           <Skeleton className="h-20 w-full" />
@@ -2816,7 +2816,7 @@ export function AdminAuditLogManager() {
 
   return (
     <div className="panel overflow-hidden">
-      <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">Audit log</h2>
+      <h2 className="break-words font-display text-2xl tracking-tight sm:text-3xl">Partner logs & approvals</h2>
       <div className="mt-6 flex flex-col gap-3">
         {logs.map((log) => (
           <div key={log.id} className="flex items-center justify-between gap-4 rounded-2xl border border-slate-100 px-4 py-3">
