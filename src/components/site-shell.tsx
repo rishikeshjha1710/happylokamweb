@@ -27,14 +27,9 @@ const socialLinks = [
 
 function BrandMark({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="flex items-center gap-3">
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#fb7185,#be123c)] text-sm font-black uppercase tracking-[0.2em] text-white shadow-[0_12px_35px_rgba(225,29,72,0.28)]">
-        HL
-      </div>
-      <div className={compact ? '' : 'hidden sm:block'}>
-        <p className="font-display text-xl font-black tracking-tight text-slate-950">happylokam</p>
-        <p className="text-[10px] font-bold uppercase tracking-[0.38em] text-rose-600">Premium Event Network</p>
-      </div>
+    <div className="flex flex-col">
+      <p className="font-display text-xl font-black tracking-tight text-rose-600 md:text-2xl">Happylokam</p>
+      {!compact ? <p className="text-[10px] font-bold uppercase tracking-[0.38em] text-rose-500">Premium Event Network</p> : null}
     </div>
   );
 }

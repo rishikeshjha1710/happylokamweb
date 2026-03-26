@@ -1,7 +1,52 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { ArrowRight, CalendarRange, LayoutDashboard, ShieldCheck, Sparkles, Star, CheckCircle2 } from 'lucide-react';
 import { PublicServiceGrid } from '@/components/public-service-grid';
+
+const siteOrigin = process.env.NEXT_PUBLIC_SITE_ORIGIN?.trim() || 'https://happylokam.com';
+
+export const metadata: Metadata = {
+  title: 'Happylokam | Event Booking, Celebration Planning, and Partner Marketplace',
+  description:
+    'Discover trusted celebration partners, browse premium event services, and book faster with Happylokam.',
+  keywords: [
+    'Happylokam',
+    'event booking',
+    'celebration planning',
+    'party vendors',
+    'wedding services',
+    'partner marketplace',
+    'event management',
+    'secure bookings'
+  ],
+  alternates: {
+    canonical: '/'
+  },
+  openGraph: {
+    title: 'Happylokam | Event Booking and Celebration Planning',
+    description:
+      'Discover trusted celebration partners, browse premium event services, and book faster with Happylokam.',
+    url: siteOrigin,
+    siteName: 'Happylokam',
+    type: 'website',
+    images: [
+      {
+        url: '/og-image.svg',
+        width: 1200,
+        height: 630,
+        alt: 'Happylokam event booking platform'
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Happylokam | Event Booking, Celebration Planning, and Partner Marketplace',
+    description:
+      'Discover trusted celebration partners, browse premium event services, and book faster with Happylokam.',
+    images: ['/og-image.svg']
+  }
+};
 
 const roleJourneys = [
   {
@@ -53,8 +98,35 @@ const experienceStrip = [
 ];
 
 export default function HomePage() {
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'Happylokam',
+      url: siteOrigin,
+      logo: `${siteOrigin}/favicon.svg`,
+      description:
+        'Premium event booking and celebration platform for users, partners, and admins with fast discovery and secure bookings.'
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Happylokam',
+      url: siteOrigin,
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${siteOrigin}/explore?query={search_term_string}`,
+        'query-input': 'required name=search_term_string'
+      }
+    }
+  ];
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-slate-950 pb-20 pt-28 md:pb-32 md:pt-40">
         <div className="absolute inset-0 z-0">

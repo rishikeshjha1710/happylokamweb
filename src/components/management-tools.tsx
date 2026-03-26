@@ -143,7 +143,7 @@ function ProfileImageField({
             {imageUrl ? 'Uploaded photo saved to database.' : 'No photo uploaded yet.'}
           </p>
           <p className="max-w-xl text-sm leading-6 text-slate-600">
-            Upload a clear profile image or logo. Happylokam compresses the file and stores it in the database so it remains available after reload.
+            Upload a clear profile photo or brand image. Happylokam compresses the file and stores it in the database so it remains available after reload.
           </p>
           <div className="flex flex-wrap items-center gap-3">
             <label
@@ -1832,7 +1832,7 @@ export function PartnerProfileManager({ profile }: PartnerProfileManagerProps) {
             Commercial identity built for trust, reviews, and bookings.
           </h2>
           <p className="mt-4 text-sm leading-7 text-white/70">
-            Keep your business image, city, and description current. The uploaded logo or portrait is stored directly in the database and reloads with the profile.
+            Keep your business image, city, and description current. The uploaded profile photo or portrait is stored directly in the database and reloads with the profile.
           </p>
 
           <div className="mt-8 flex items-center gap-4 rounded-[28px] border border-white/10 bg-white/8 p-4">
@@ -1883,7 +1883,7 @@ export function PartnerProfileManager({ profile }: PartnerProfileManagerProps) {
           <div className="mt-6">
             <ProfileImageField
               title="Business photo"
-              description="Upload a logo or a professional portrait. The image is optimized and stored directly in the database."
+                description="Upload a profile photo or a professional portrait. The image is optimized and stored directly in the database."
               imageUrl={form.avatarUrl || profile.avatarUrl}
               fallbackTitle={form.businessName || profile.businessName || 'Partner profile'}
               onUpload={handleAvatarUpload}

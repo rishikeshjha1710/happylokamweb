@@ -1,18 +1,18 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="96" y1="56" x2="416" y2="456" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#fb7185"/>
-      <stop offset="1" stop-color="#be123c"/>
+    <linearGradient id="bg" x1="60" y1="56" x2="452" y2="456" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff1f2"/>
+      <stop offset="1" stop-color="#ffe4e6"/>
     </linearGradient>
-    <linearGradient id="shine" x1="144" y1="120" x2="368" y2="392" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#ffffff" stop-opacity="0.36"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    <linearGradient id="frame" x1="96" y1="96" x2="416" y2="416" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fb7185"/>
+      <stop offset="1" stop-color="#e11d48"/>
     </linearGradient>
   </defs>
   <rect width="512" height="512" rx="120" fill="url(#bg)"/>
-  <rect x="48" y="48" width="416" height="416" rx="96" fill="url(#shine)"/>
-  <circle cx="256" cy="256" r="138" fill="#ffffff" fill-opacity="0.14"/>
-  <path d="M190 346V166h34v72h64v-72h34v180h-34v-76h-64v76h-34z" fill="#ffffff"/>
-  <path d="M360 166c22 0 40 18 40 40s-18 40-40 40-40-18-40-40 18-40 40-40z" fill="#ffffff" fill-opacity="0.18"/>
-  <path d="M360 194c6 0 10 4 10 10s-4 10-10 10-10-4-10-10 4-10 10-10z" fill="#ffffff"/>
+  <rect x="42" y="42" width="428" height="428" rx="104" fill="#ffffff"/>
+  <rect x="42" y="42" width="428" height="428" rx="104" stroke="url(#frame)" stroke-width="8"/>
+  <circle cx="256" cy="156" r="28" fill="#fecdd3"/>
+  <text x="256" y="262" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="800" letter-spacing="-1.2" fill="#e11d48">Happylokam</text>
+  <text x="256" y="328" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" letter-spacing="6" fill="#be123c">EVENTS</text>
 </svg>

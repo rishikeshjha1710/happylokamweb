@@ -1,8 +1,13 @@
+import type { Metadata } from 'next';
 import { AdminDashboardView } from '@/components/dashboard-panels';
 import { DashboardShell } from '@/components/dashboard-shell';
 
-export const metadata = {
-  title: 'Admin Panel'
+export const metadata: Metadata = {
+  title: 'Admin Panel',
+  robots: {
+    index: false,
+    follow: false
+  }
 };
 
 export default function AdminDashboardPage() {

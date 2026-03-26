@@ -1,8 +1,13 @@
+import type { Metadata } from 'next';
 import { DashboardShell } from '@/components/dashboard-shell';
 import { PartnerDashboardView } from '@/components/dashboard-panels';
 
-export const metadata = {
-  title: 'Partner Panel'
+export const metadata: Metadata = {
+  title: 'Partner Panel',
+  robots: {
+    index: false,
+    follow: false
+  }
 };
 
 export default function PartnerDashboardPage() {
