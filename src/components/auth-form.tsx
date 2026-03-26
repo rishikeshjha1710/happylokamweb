@@ -130,7 +130,7 @@ export function AuthForm({ mode }: AuthFormProps) {
 
   if (!isSessionReady) {
     return (
-      <section className="mx-auto max-w-7xl px-6 py-20">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20">
         <div className="panel flex min-h-[420px] flex-col items-center justify-center text-center">
           <span className="pill">Preparing your experience</span>
           <h1 className="mt-5 font-display text-3xl tracking-tight text-slate-950 md:text-4xl">
@@ -145,7 +145,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   }
 
   return (
-    <section className="mx-auto max-w-7xl px-6 py-20">
+    <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-20">
       {errorDetails && (
         <PremiumAlert
           type="error"
@@ -163,7 +163,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         />
       )}
       <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="relative overflow-hidden rounded-[36px] border border-rose-200/70 bg-[linear-gradient(135deg,#020617,#be123c)] p-8 text-white shadow-[0_30px_120px_rgba(225,29,72,0.22)] md:p-12">
+        <div className="relative hidden overflow-hidden rounded-[36px] border border-rose-200/70 bg-[linear-gradient(135deg,#020617,#be123c)] p-8 text-white shadow-[0_30px_120px_rgba(225,29,72,0.22)] md:p-12 lg:block">
           <div className="absolute -right-20 -top-20 h-96 w-96 rounded-full bg-rose-500/10 blur-[120px]" />
           <div className="relative">
             <span className="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.24em] text-white/90 backdrop-blur-sm">
@@ -211,7 +211,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           </div>
         </div>
 
-        <div className="panel flex flex-col justify-center border-rose-100 bg-white/80 backdrop-blur-md">
+        <div className="panel mx-auto flex w-full max-w-xl flex-col justify-center border-rose-100 bg-white/80 backdrop-blur-md lg:max-w-none">
           <div className="mb-10 text-center lg:text-left">
             <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-rose-600">
               {mode === 'login'

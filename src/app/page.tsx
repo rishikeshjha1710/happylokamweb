@@ -90,7 +90,7 @@ export default function HomePage() {
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
-                href="/signup?role=VENDOR"
+                href="/signup?role=PARTNER"
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white/10"
               >
                 Join as Partner
@@ -112,6 +112,13 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+      </section>
+
+      <section id="platform" className="bg-[linear-gradient(180deg,#fff1f2,#fff7f8)] py-12">
+        <div className="mx-auto max-w-7xl px-6 text-center mb-4">
+          <span className="pill border-rose-200 bg-white text-rose-700">Quick Browse</span>
+        </div>
+        <PublicServiceGrid compact />
       </section>
 
       {/* Experience Strip */}
@@ -260,126 +267,6 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* Past Celebrations Section */}
-      <section className="bg-[#fff7f8] py-24 lg:py-32">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="text-center mb-16">
-            <span className="pill border-rose-200 bg-white text-rose-700">Heritage</span>
-            <h2 className="mt-5 font-display text-4xl tracking-tight text-slate-950 md:text-5xl">
-              Our Past <span className="text-rose-600">Celebrations.</span>
-            </h2>
-            <p className="mt-4 text-slate-600 max-w-2xl mx-auto">
-              A glimpse into the beautiful moments we've helped craft. Every celebration is a story of joy, family, and professional excellence.
-            </p>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {[
-              {
-                title: "Royal Wedding Gala",
-                location: "Udaipur, Rajasthan",
-                image: "/wedding-gallery.png",
-                tag: "Wedding"
-              },
-              {
-                title: "Tech Horizon Summit",
-                location: "Bangalore, Karnataka",
-                image: "/corporate-gallery.png",
-                tag: "Corporate"
-              },
-              {
-                title: "Golden Jubilee Anniversary",
-                location: "Mumbai, Maharashtra",
-                image: "/hero.png",
-                tag: "Family"
-              }
-            ].map((item, i) => (
-              <div key={i} className="group relative overflow-hidden rounded-[32px] bg-slate-100 aspect-[4/5] shadow-xl hover:shadow-2xl transition-all duration-500">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  sizes="(min-width: 1024px) 24rem, (min-width: 768px) 50vw, 100vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <span className="inline-block rounded-full bg-rose-600/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-rose-400 backdrop-blur-md">
-                    {item.tag}
-                  </span>
-                  <h3 className="mt-4 font-display text-2xl text-white">{item.title}</h3>
-                  <p className="mt-2 text-sm text-white/60">{item.location}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Masterpiece Gallery Section */}
-      <section className="overflow-hidden bg-[linear-gradient(180deg,#3f0016,#020617)] py-24 lg:py-32">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
-            <div className="max-w-2xl">
-              <span className="pill bg-white/10 text-rose-400 border-white/10">The Collection</span>
-              <h2 className="mt-6 font-display text-4xl tracking-tight text-white md:text-6xl">
-                Masterpiece <span className="text-rose-600">Gallery.</span>
-              </h2>
-              <p className="mt-6 text-lg text-white/60">
-                Explore the elite tier of celebration services. From bespoke catering to cinematic photography, find the masterpiece for your next event.
-              </p>
-            </div>
-            <Link href="/explore" className="group hidden md:flex items-center gap-3 text-white font-bold hover:text-rose-500 transition">
-              View all services
-              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-4 lg:grid-cols-4 aspect-[16/9] md:aspect-auto">
-             <div className="md:col-span-2 md:row-span-2 relative overflow-hidden rounded-[40px] group">
-                <Image src="/wedding-gallery.png" alt="Premium Service" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover transition-transform duration-1000 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition-colors" />
-                <div className="absolute inset-0 p-10 flex flex-col justify-end">
-                   <h3 className="font-display text-3xl text-white">Elite Wedding Planning</h3>
-                   <p className="mt-3 text-white/70 max-w-sm">A full-service luxury experience for the most important day of your family life.</p>
-                </div>
-             </div>
-             <div className="relative overflow-hidden rounded-[32px] group aspect-square">
-                <Image src="/corporate-gallery.png" alt="Corporate" fill sizes="(min-width: 1024px) 24rem, 50vw" className="object-cover transition-transform duration-1000 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition-colors" />
-                <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                   <h3 className="font-display text-xl text-white">Corporate Excellence</h3>
-                </div>
-             </div>
-             <div className="relative overflow-hidden rounded-[32px] group aspect-square">
-                <Image src="/hero.png" alt="Catering" fill sizes="(min-width: 1024px) 24rem, 50vw" className="object-cover transition-transform duration-1000 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition-colors" />
-                <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                   <h3 className="font-display text-xl text-white">Gourmet Catering</h3>
-                </div>
-             </div>
-             <div className="md:col-span-2 relative overflow-hidden rounded-[32px] group h-64 md:h-auto">
-                <Image src="/hero.png" alt="Decor" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover transition-transform duration-1000 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition-colors" />
-                <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                   <h3 className="font-display text-2xl text-white">Bespoke Floral Decor</h3>
-                </div>
-             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Explore Grid Preview (Legacy fallback) */}
-      <section id="platform" className="bg-[linear-gradient(180deg,#fff1f2,#fff7f8)] py-24">
-        <div className="mx-auto max-w-7xl px-6 text-center mb-12">
-          <span className="pill border-rose-200 bg-white text-rose-700">Quick Browse</span>
-          <h2 className="mt-5 font-display text-4xl tracking-tight text-slate-950 md:text-5xl">
-            Live <span className="text-rose-600">Marketplace</span> Feed.
-          </h2>
-        </div>
-        <PublicServiceGrid compact />
       </section>
     </>
   );
