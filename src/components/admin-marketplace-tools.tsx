@@ -21,6 +21,7 @@ import { PremiumAlert } from './dashboard-primitives';
 type PartnerSummary = {
   id: string;
   businessName: string;
+  avatarUrl?: string | null;
   city: string;
   state?: string | null;
   approvalStatus: string;
@@ -222,10 +223,23 @@ export function AdminPartnerOnboardingManager() {
           <div className="mt-6 space-y-3">
             {recentPartners.map((vendor) => (
               <div key={vendor.id} className="rounded-[22px] border border-white/10 bg-white/5 p-4">
-                <p className="font-semibold text-white">{vendor.businessName}</p>
-                <p className="mt-1 text-sm text-white/70">
-                  {vendor.owner.fullName} • {vendor.city}
-                </p>
+                <div className="flex items-center gap-3">
+                  <div className="relative h-12 w-12 overflow-hidden rounded-2xl border border-white/10 bg-white/10">
+                    <MarketplaceImage
+                      src={vendor.avatarUrl}
+                      alt={vendor.businessName}
+                      fill
+                      sizes="48px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-white">{vendor.businessName}</p>
+                    <p className="mt-1 text-sm text-white/70">
+                      {vendor.owner.fullName} • {vendor.city}
+                    </p>
+                  </div>
+                </div>
                 <p className="mt-2 text-xs uppercase tracking-[0.24em] text-rose-200/85">{vendor.approvalStatus}</p>
               </div>
             ))}

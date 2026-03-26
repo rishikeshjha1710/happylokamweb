@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from 'react';
 import { Calendar, ChevronDown, Filter, Search, TrendingUp, Users, Wallet } from 'lucide-react';
+import { MarketplaceImage } from './marketplace-image';
 
 // --- Types ---
 
@@ -236,17 +237,35 @@ export function ProfileExecutive({
   user, 
   role 
 }: { 
-  user: any; 
+  user: {
+    fullName?: string | null;
+    email?: string | null;
+    username?: string | null;
+    avatarUrl?: string | null;
+  };
   role: 'ADMIN' | 'PARTNER' | 'USER' 
 }) {
+  const title = user.fullName?.trim() || 'Profile';
+  const hasAvatar = Boolean(user.avatarUrl?.trim());
+
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_2fr]">
       <div className="space-y-6">
         <div className="panel border-rose-100 bg-white p-8 text-center ring-1 ring-rose-50">
-          <div className="mx-auto flex h-32 w-32 items-center justify-center rounded-[48px] bg-[linear-gradient(135deg,#be123c,#f43f5e)] text-4xl font-bold text-white shadow-2xl">
-            {user.fullName?.charAt(0) ?? 'P'}
+          <div className="relative mx-auto flex h-32 w-32 items-center justify-center overflow-hidden rounded-[48px] border border-rose-100 bg-[linear-gradient(135deg,#be123c,#f43f5e)] text-4xl font-bold text-white shadow-2xl">
+            {hasAvatar ? (
+              <MarketplaceImage
+                src={user.avatarUrl}
+                alt={title}
+                fill
+                sizes="128px"
+                className="object-cover"
+              />
+            ) : (
+              <span>{title.charAt(0).toUpperCase()}</span>
+            )}
           </div>
-          <h3 className="mt-6 font-display text-2xl font-bold text-slate-950">{user.fullName}</h3>
+          <h3 className="mt-6 font-display text-2xl font-bold text-slate-950">{title}</h3>
           <p className="mt-2 text-sm text-slate-500 font-medium">{role === 'PARTNER' ? 'Business Partner' : role === 'ADMIN' ? 'Site Administrator' : 'Platform Member'}</p>
           <div className="mt-6 flex justify-center gap-2">
              <span className="pill bg-rose-50 text-rose-700 border-rose-100">Verified Identity</span>

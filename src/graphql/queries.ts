@@ -73,6 +73,7 @@ export const SERVICE_BY_SLUG_QUERY = gql`
         id
         businessName
         slug
+        avatarUrl
         city
         state
         description
@@ -120,6 +121,7 @@ export const VENDOR_PROFILE_QUERY = gql`
       }
       owner {
         fullName
+        avatarUrl
       }
     }
   }
@@ -156,6 +158,7 @@ export const ME_QUERY = gql`
     me {
       id
       fullName
+      avatarUrl
       email
       username
       phone
@@ -242,6 +245,7 @@ export const MY_VENDOR_PROFILE_QUERY = gql`
     myVendorProfile {
       id
       businessName
+      avatarUrl
       slug
       city
       state
@@ -312,6 +316,7 @@ export const ADMIN_USERS_QUERY = gql`
     adminUsers {
       id
       fullName
+      avatarUrl
       email
       username
       phone
@@ -328,6 +333,7 @@ export const ADMIN_VENDORS_QUERY = gql`
     adminVendors {
       id
       businessName
+      avatarUrl
       city
       state
       approvalStatus
@@ -340,6 +346,7 @@ export const ADMIN_VENDORS_QUERY = gql`
         fullName
         email
         phone
+        avatarUrl
       }
     }
   }
@@ -505,6 +512,7 @@ export const UPDATE_PROFILE_MUTATION = gql`
     updateProfile(input: $input) {
       id
       fullName
+      avatarUrl
       username
       phone
     }
@@ -750,6 +758,7 @@ export const UPDATE_VENDOR_PROFILE_MUTATION = gql`
     updateVendorProfile(input: $input) {
       id
       businessName
+      avatarUrl
       slug
       description
       city

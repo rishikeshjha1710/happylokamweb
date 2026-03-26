@@ -93,9 +93,22 @@ export function ServiceDetailView({ slug }: { slug: string }) {
         </div>
         <aside className="space-y-6">
           <div className="panel sticky top-28">
-            <p className="pill">Partner spotlight</p>
-            <h2 className="mt-4 font-display text-3xl tracking-tight">{service.vendor.businessName}</h2>
-            <p className="mt-3 text-sm text-slate-600">{service.vendor.description ?? 'Verified partner on Happylokam.'}</p>
+            <div className="flex items-center gap-4">
+              <div className="relative h-16 w-16 overflow-hidden rounded-[24px] border border-rose-100 bg-rose-50">
+                <MarketplaceImage
+                  src={service.vendor.avatarUrl}
+                  alt={service.vendor.businessName}
+                  fill
+                  sizes="64px"
+                  className="object-cover"
+                />
+              </div>
+              <div>
+                <p className="pill">Partner spotlight</p>
+                <h2 className="mt-3 font-display text-3xl tracking-tight">{service.vendor.businessName}</h2>
+              </div>
+            </div>
+            <p className="mt-4 text-sm text-slate-600">{service.vendor.description ?? 'Verified partner on Happylokam.'}</p>
             <div className="mt-6 grid gap-4">
               <div className="rounded-[24px] bg-rose-50 p-5">
                 <p className="text-xs uppercase tracking-[0.2em] text-rose-500">Location</p>
@@ -161,8 +174,21 @@ export function PartnerDetailView({ vendorId }: { vendorId: string }) {
     <section className="mx-auto max-w-7xl px-6 py-16">
       <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
         <div className="panel bg-[linear-gradient(180deg,rgba(255,241,245,1),rgba(255,255,255,1))]">
-          <span className="pill">{vendor.isVerified ? 'Verified partner' : 'Marketplace partner'}</span>
-          <h1 className="mt-5 font-display text-4xl tracking-tight text-slate-950 md:text-6xl">{vendor.businessName}</h1>
+          <div className="flex items-center gap-4">
+            <div className="relative h-20 w-20 overflow-hidden rounded-[28px] border border-rose-100 bg-rose-50">
+              <MarketplaceImage
+                src={vendor.avatarUrl}
+                alt={vendor.businessName}
+                fill
+                sizes="80px"
+                className="object-cover"
+              />
+            </div>
+            <div>
+              <span className="pill">{vendor.isVerified ? 'Verified partner' : 'Marketplace partner'}</span>
+              <h1 className="mt-3 font-display text-4xl tracking-tight text-slate-950 md:text-6xl">{vendor.businessName}</h1>
+            </div>
+          </div>
           <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">{vendor.description ?? 'Premium event production and hospitality partner.'}</p>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             <div className="stat-tile">

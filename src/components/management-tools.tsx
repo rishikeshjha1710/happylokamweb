@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   ADMIN_ANALYTICS_QUERY,
@@ -41,6 +41,19 @@ import { getStoredRole } from '@/lib/auth';
 import { fileToDataUrl, filesToDataUrls } from '@/lib/media';
 import { MarketplaceImage } from './marketplace-image';
 import { PremiumAlert, PremiumLoader, Skeleton, TermsModal } from './dashboard-primitives';
+
+type PartnerSummary = {
+  id: string;
+  businessName: string;
+  avatarUrl?: string | null;
+  city: string;
+  state?: string | null;
+  approvalStatus: string;
+  owner: {
+    fullName: string;
+    email?: string | null;
+  };
+};
 
 function MessageBanner({ message }: { message: string | null }) {
   const [dismissedMessage, setDismissedMessage] = useState<string | null>(null);
@@ -86,6 +99,72 @@ function ServiceImagePreview({ title, imageUrl }: { title: string; imageUrl?: st
         sizes="(min-width: 768px) 32rem, 100vw"
         className="object-cover"
       />
+    </div>
+  );
+}
+
+function ProfileImageField({
+  title,
+  description,
+  imageUrl,
+  fallbackTitle,
+  onUpload,
+  onClear
+}: {
+  title: string;
+  description: string;
+  imageUrl?: string | null;
+  fallbackTitle: string;
+  onUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClear?: () => void;
+}) {
+  const inputId = useId();
+
+  return (
+    <div className="rounded-[28px] border border-rose-100 bg-white p-5 shadow-[0_12px_40px_rgba(15,23,42,0.04)]">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-rose-500">{title}</p>
+          <p className="mt-2 text-sm leading-6 text-slate-500">{description}</p>
+        </div>
+      </div>
+      <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center">
+        <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-[32px] border border-rose-100 bg-[linear-gradient(180deg,#fff,#fff7f8)]">
+          <MarketplaceImage
+            src={imageUrl}
+            alt={fallbackTitle}
+            fill
+            sizes="112px"
+            className="object-cover"
+          />
+        </div>
+        <div className="space-y-3">
+          <p className="text-sm font-semibold text-slate-900">
+            {imageUrl ? 'Uploaded photo saved to database.' : 'No photo uploaded yet.'}
+          </p>
+          <p className="max-w-xl text-sm leading-6 text-slate-600">
+            Upload a clear profile image or logo. Happylokam compresses the file and stores it in the database so it remains available after reload.
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <label
+              htmlFor={inputId}
+              className="cursor-pointer rounded-full bg-rose-600 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white transition hover:bg-rose-500"
+            >
+              Upload photo
+            </label>
+            {onClear && imageUrl ? (
+              <button
+                type="button"
+                onClick={onClear}
+                className="rounded-full border border-rose-200 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-rose-700 transition hover:bg-rose-50"
+              >
+                Remove
+              </button>
+            ) : null}
+          </div>
+          <input id={inputId} type="file" accept="image/*" onChange={onUpload} className="sr-only" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -357,7 +436,8 @@ export function ProfileSettingsCard() {
   const [form, setForm] = useState({
     fullName: '',
     username: '',
-    phone: ''
+    phone: '',
+    avatarUrl: ''
   });
   const [updateProfile, updateState] = useMutation(UPDATE_PROFILE_MUTATION, {
     refetchQueries: [{ query: ME_QUERY }]
@@ -368,10 +448,28 @@ export function ProfileSettingsCard() {
       setForm({
         fullName: data.me.fullName ?? '',
         username: data.me.username ?? '',
-        phone: data.me.phone ?? ''
+        phone: data.me.phone ?? '',
+        avatarUrl: data.me.avatarUrl ?? ''
       });
     }
   }, [data]);
+
+  async function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    try {
+      const image = await fileToDataUrl(file, 2);
+      setForm((current) => ({ ...current, avatarUrl: image }));
+      setMessage('Profile photo selected. Save changes to update the database.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Profile photo upload failed.');
+    } finally {
+      event.target.value = '';
+    }
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -382,7 +480,8 @@ export function ProfileSettingsCard() {
           input: {
             fullName: form.fullName,
             username: form.username || undefined,
-            phone: form.phone || undefined
+            phone: form.phone || undefined,
+            avatarUrl: form.avatarUrl || null
           }
         }
       });
@@ -393,50 +492,101 @@ export function ProfileSettingsCard() {
   }
 
   return (
-    <div className="panel">
-      <h2 className="font-display text-3xl tracking-tight">Profile settings</h2>
-      <div className="mt-4 grid gap-3 md:grid-cols-3">
-        <div className="rounded-2xl border border-rose-100 bg-rose-50/60 p-4">
-          <p className="text-xs uppercase tracking-[0.2em] text-rose-500">Email</p>
-          <p className="mt-2 text-sm font-semibold text-slate-900">{data?.me?.email ?? 'No email'}</p>
+    <div className="panel overflow-hidden border-rose-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,244,246,0.9))] ring-1 ring-rose-50/60">
+      <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="rounded-[30px] bg-slate-950 p-6 text-white shadow-[0_24px_80px_rgba(15,23,42,0.22)]">
+          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-rose-300">User profile</p>
+          <h2 className="mt-4 font-display text-4xl tracking-tight text-white">
+            A polished profile that stays in sync with your bookings.
+          </h2>
+          <p className="mt-4 text-sm leading-7 text-white/70">
+            Upload a profile image, update your identity details, and keep the account profile stored in the database so it stays available after reload.
+          </p>
+
+          <div className="mt-8 flex items-center gap-4 rounded-[28px] border border-white/10 bg-white/8 p-4">
+            <div className="relative h-24 w-24 overflow-hidden rounded-[28px] border border-white/10 bg-white/10">
+              <MarketplaceImage
+                src={form.avatarUrl || data?.me?.avatarUrl}
+                alt={form.fullName || data?.me?.fullName || 'User profile'}
+                fill
+                sizes="96px"
+                className="object-cover"
+              />
+            </div>
+            <div className="min-w-0">
+              <p className="truncate font-display text-2xl font-bold text-white">{form.fullName || data?.me?.fullName || 'Your profile'}</p>
+              <p className="mt-1 truncate text-sm text-white/70">{data?.me?.email ?? 'No email available'}</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="pill border border-white/10 bg-white/10 text-white">{data?.me?.role ?? 'USER'}</span>
+                <span className="pill border border-white/10 bg-white/10 text-white">{data?.me?.isActive ? 'Active' : 'Disabled'}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-[22px] border border-white/10 bg-white/8 p-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/55">Username</p>
+              <p className="mt-2 text-sm font-semibold text-white">{data?.me?.username ?? 'Not set'}</p>
+            </div>
+            <div className="rounded-[22px] border border-white/10 bg-white/8 p-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/55">Phone</p>
+              <p className="mt-2 text-sm font-semibold text-white">{data?.me?.phone ?? 'Not set'}</p>
+            </div>
+          </div>
         </div>
-        <div className="rounded-2xl border border-rose-100 bg-rose-50/60 p-4">
-          <p className="text-xs uppercase tracking-[0.2em] text-rose-500">Role</p>
-          <p className="mt-2 text-sm font-semibold text-slate-900">{data?.me?.role ?? 'USER'}</p>
-        </div>
-        <div className="rounded-2xl border border-rose-100 bg-rose-50/60 p-4">
-          <p className="text-xs uppercase tracking-[0.2em] text-rose-500">Account</p>
-          <p className="mt-2 text-sm font-semibold text-slate-900">{data?.me?.isActive ? 'Active' : 'Disabled'}</p>
-        </div>
+
+        <form onSubmit={handleSubmit} className="rounded-[30px] border border-rose-100 bg-white/96 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.08)]">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-rose-500">Edit profile</p>
+              <h3 className="mt-3 font-display text-3xl tracking-tight text-slate-950">Refine your account details</h3>
+            </div>
+            <span className="rounded-full border border-rose-100 bg-rose-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-rose-600">
+              Database backed
+            </span>
+          </div>
+
+          <div className="mt-6">
+            <ProfileImageField
+              title="Profile photo"
+              description="Use a portrait or clear icon. The upload is optimized before it is stored in the database."
+              imageUrl={form.avatarUrl || data?.me?.avatarUrl}
+              fallbackTitle={form.fullName || data?.me?.fullName || 'User profile'}
+              onUpload={handleAvatarUpload}
+              onClear={() => setForm((current) => ({ ...current, avatarUrl: '' }))}
+            />
+          </div>
+
+          <div className="mt-6 grid gap-4">
+            <input
+              value={form.fullName}
+              onChange={(event) => setForm((current) => ({ ...current, fullName: event.target.value }))}
+              placeholder="Full name"
+              className="rounded-2xl border border-rose-100 px-4 py-3 text-sm shadow-sm transition focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
+            />
+            <input
+              value={form.username}
+              onChange={(event) => setForm((current) => ({ ...current, username: event.target.value }))}
+              placeholder="Username"
+              className="rounded-2xl border border-rose-100 px-4 py-3 text-sm shadow-sm transition focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
+            />
+            <input
+              value={form.phone}
+              onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
+              placeholder="Phone"
+              className="rounded-2xl border border-rose-100 px-4 py-3 text-sm shadow-sm transition focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
+            />
+            <button
+              type="submit"
+              disabled={updateState.loading}
+              className="rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-600 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {updateState.loading ? 'Saving...' : 'Save profile'}
+            </button>
+          </div>
+        </form>
       </div>
-      <form onSubmit={handleSubmit} className="mt-6 grid gap-3">
-        <input
-          value={form.fullName}
-          onChange={(event) => setForm((current) => ({ ...current, fullName: event.target.value }))}
-          placeholder="Full name"
-          className="rounded-2xl border border-rose-100 px-4 py-3 text-sm"
-        />
-        <input
-          value={form.username}
-          onChange={(event) => setForm((current) => ({ ...current, username: event.target.value }))}
-          placeholder="Username"
-          className="rounded-2xl border border-rose-100 px-4 py-3 text-sm"
-        />
-        <input
-          value={form.phone}
-          onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
-          placeholder="Phone"
-          className="rounded-2xl border border-rose-100 px-4 py-3 text-sm"
-        />
-        <button
-          type="submit"
-          disabled={updateState.loading}
-          className="rounded-2xl bg-rose-600 px-4 py-3 text-sm font-semibold text-white"
-        >
-          {updateState.loading ? 'Saving...' : 'Save profile'}
-        </button>
-      </form>
-      <div className="mt-4">
+      <div className="p-6 pt-0">
         <MessageBanner message={message} />
       </div>
     </div>
@@ -1601,10 +1751,14 @@ export function PartnerAvailabilityManager({ availability }: PartnerAvailability
 type PartnerProfileManagerProps = {
   profile: {
     businessName?: string;
+    avatarUrl?: string | null;
     description?: string | null;
     city?: string;
     state?: string | null;
     approvalStatus?: string;
+    isVerified?: boolean;
+    ratingAverage?: number;
+    totalReviews?: number;
   };
 };
 
@@ -1614,7 +1768,8 @@ export function PartnerProfileManager({ profile }: PartnerProfileManagerProps) {
     businessName: profile.businessName ?? '',
     description: profile.description ?? '',
     city: profile.city ?? '',
-    state: profile.state ?? ''
+    state: profile.state ?? '',
+    avatarUrl: profile.avatarUrl ?? ''
   });
   const [updateVendorProfile, updateState] = useMutation(UPDATE_VENDOR_PROFILE_MUTATION, {
     refetchQueries: [{ query: MY_VENDOR_PROFILE_QUERY }]
@@ -1625,9 +1780,27 @@ export function PartnerProfileManager({ profile }: PartnerProfileManagerProps) {
       businessName: profile.businessName ?? '',
       description: profile.description ?? '',
       city: profile.city ?? '',
-      state: profile.state ?? ''
+      state: profile.state ?? '',
+      avatarUrl: profile.avatarUrl ?? ''
     });
-  }, [profile.businessName, profile.description, profile.city, profile.state]);
+  }, [profile.avatarUrl, profile.businessName, profile.description, profile.city, profile.state]);
+
+  async function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    try {
+      const image = await fileToDataUrl(file, 2);
+      setForm((current) => ({ ...current, avatarUrl: image }));
+      setMessage('Partner image selected. Save changes to update the database.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Partner image upload failed.');
+    } finally {
+      event.target.value = '';
+    }
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -1639,7 +1812,8 @@ export function PartnerProfileManager({ profile }: PartnerProfileManagerProps) {
             businessName: form.businessName,
             description: form.description || undefined,
             city: form.city,
-            state: form.state || undefined
+            state: form.state || undefined,
+            avatarUrl: form.avatarUrl || null
           }
         }
       });
@@ -1650,48 +1824,110 @@ export function PartnerProfileManager({ profile }: PartnerProfileManagerProps) {
   }
 
   return (
-    <div className="panel">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h2 className="font-display text-3xl font-bold tracking-tight text-slate-950">Commercial Identity</h2>
-          <p className="mt-2 text-sm font-semibold text-rose-600 uppercase tracking-widest">Verification: {profile.approvalStatus ?? 'Verifying'}</p>
+    <div className="panel overflow-hidden border-rose-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,245,247,0.88))] ring-1 ring-rose-50/50">
+      <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="rounded-[30px] bg-slate-950 p-6 text-white shadow-[0_24px_80px_rgba(15,23,42,0.24)]">
+          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-rose-300">Partner profile</p>
+          <h2 className="mt-4 font-display text-4xl tracking-tight text-white">
+            Commercial identity built for trust, reviews, and bookings.
+          </h2>
+          <p className="mt-4 text-sm leading-7 text-white/70">
+            Keep your business image, city, and description current. The uploaded logo or portrait is stored directly in the database and reloads with the profile.
+          </p>
+
+          <div className="mt-8 flex items-center gap-4 rounded-[28px] border border-white/10 bg-white/8 p-4">
+            <div className="relative h-24 w-24 overflow-hidden rounded-[28px] border border-white/10 bg-white/10">
+              <MarketplaceImage
+                src={form.avatarUrl || profile.avatarUrl}
+                alt={form.businessName || profile.businessName || 'Partner profile'}
+                fill
+                sizes="96px"
+                className="object-cover"
+              />
+            </div>
+            <div className="min-w-0">
+              <p className="truncate font-display text-2xl font-bold text-white">{form.businessName || profile.businessName || 'Partner profile'}</p>
+              <p className="mt-1 truncate text-sm text-white/70">
+                {profile.city}{profile.state ? `, ${profile.state}` : ''}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="pill border border-white/10 bg-white/10 text-white">{profile.approvalStatus ?? 'PENDING'}</span>
+                <span className="pill border border-white/10 bg-white/10 text-white">{profile.isVerified ? 'Verified' : 'Verification pending'}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-[22px] border border-white/10 bg-white/8 p-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/55">Rating</p>
+              <p className="mt-2 text-sm font-semibold text-white">{Number(profile.ratingAverage ?? 0).toFixed(1)}</p>
+            </div>
+            <div className="rounded-[22px] border border-white/10 bg-white/8 p-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/55">Reviews</p>
+              <p className="mt-2 text-sm font-semibold text-white">{profile.totalReviews ?? 0}</p>
+            </div>
+          </div>
         </div>
+
+        <form onSubmit={handleSubmit} className="rounded-[30px] border border-rose-100 bg-white/96 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.08)]">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-rose-500">Commercial Identity</p>
+              <h3 className="mt-3 font-display text-3xl tracking-tight text-slate-950">Update your partner profile</h3>
+            </div>
+            <span className="rounded-full border border-rose-100 bg-rose-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-rose-600">
+              Live database profile
+            </span>
+          </div>
+
+          <div className="mt-6">
+            <ProfileImageField
+              title="Business photo"
+              description="Upload a logo or a professional portrait. The image is optimized and stored directly in the database."
+              imageUrl={form.avatarUrl || profile.avatarUrl}
+              fallbackTitle={form.businessName || profile.businessName || 'Partner profile'}
+              onUpload={handleAvatarUpload}
+              onClear={() => setForm((current) => ({ ...current, avatarUrl: '' }))}
+            />
+          </div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <input
+              value={form.businessName}
+              onChange={(event) => setForm((current) => ({ ...current, businessName: event.target.value }))}
+              placeholder="Business name"
+              className="rounded-2xl border border-rose-100 px-4 py-3 text-sm shadow-sm transition focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
+            />
+            <input
+              value={form.city}
+              onChange={(event) => setForm((current) => ({ ...current, city: event.target.value }))}
+              placeholder="City"
+              className="rounded-2xl border border-rose-100 px-4 py-3 text-sm shadow-sm transition focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200"
+            />
+            <input
+              value={form.state}
+              onChange={(event) => setForm((current) => ({ ...current, state: event.target.value }))}
+              placeholder="State"
+              className="rounded-2xl border border-rose-100 px-4 py-3 text-sm shadow-sm transition focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200 md:col-span-2"
+            />
+            <textarea
+              rows={4}
+              value={form.description}
+              onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
+              placeholder="Business description"
+              className="rounded-2xl border border-rose-100 px-4 py-3 text-sm shadow-sm transition focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-200 md:col-span-2"
+            />
+            <button
+              type="submit"
+              disabled={updateState.loading}
+              className="rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-600 disabled:cursor-not-allowed disabled:opacity-60 md:col-span-2"
+            >
+              {updateState.loading ? 'Saving...' : 'Save vendor profile'}
+            </button>
+          </div>
+        </form>
       </div>
-      <form onSubmit={handleSubmit} className="mt-6 grid gap-3 md:grid-cols-2">
-        <input
-          value={form.businessName}
-          onChange={(event) => setForm((current) => ({ ...current, businessName: event.target.value }))}
-          placeholder="Business name"
-          className="rounded-2xl border border-rose-100 px-4 py-3 text-sm"
-        />
-        <input
-          value={form.city}
-          onChange={(event) => setForm((current) => ({ ...current, city: event.target.value }))}
-          placeholder="City"
-          className="rounded-2xl border border-rose-100 px-4 py-3 text-sm"
-        />
-        <input
-          value={form.state}
-          onChange={(event) => setForm((current) => ({ ...current, state: event.target.value }))}
-          placeholder="State"
-          className="rounded-2xl border border-rose-100 px-4 py-3 text-sm md:col-span-2"
-        />
-        <textarea
-          rows={4}
-          value={form.description}
-          onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
-          placeholder="Business description"
-          className="rounded-2xl border border-rose-100 px-4 py-3 text-sm md:col-span-2"
-        />
-        <button
-          type="submit"
-          disabled={updateState.loading}
-          className="rounded-2xl bg-rose-600 px-4 py-3 text-sm font-semibold text-white md:col-span-2"
-        >
-          {updateState.loading ? 'Saving...' : 'Save vendor profile'}
-        </button>
-      </form>
-      <div className="mt-4">
+      <div className="p-6 pt-0">
         <MessageBanner message={message} />
       </div>
     </div>
@@ -1873,7 +2109,7 @@ export function AdminUsersManager() {
           <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Select all users</span>
         </div>
         <div className="mt-3 space-y-3">
-          {users.map((user: { id: string; fullName: string; email?: string | null; role: string; isActive: boolean }) => (
+          {users.map((user: { id: string; fullName: string; avatarUrl?: string | null; email?: string | null; role: string; isActive: boolean }) => (
             <div key={user.id} className="flex items-center gap-4">
                <input 
                 type="checkbox" 
@@ -1895,7 +2131,7 @@ export function AdminUsersManager() {
   );
 }
 
-function AdminUserRoleCard({ user }: { user: { id: string; fullName: string; email?: string | null; role: string; isActive: boolean } }) {
+function AdminUserRoleCard({ user }: { user: { id: string; fullName: string; avatarUrl?: string | null; email?: string | null; role: string; isActive: boolean } }) {
   const [role, setRole] = useState(user.role);
   const [message, setMessage] = useState<string | null>(null);
   const [updateUserRole, updateState] = useMutation(UPDATE_USER_ROLE_MUTATION, {
@@ -1940,9 +2176,20 @@ function AdminUserRoleCard({ user }: { user: { id: string; fullName: string; ema
   return (
     <div className="rounded-[20px] border border-rose-100 p-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p className="font-semibold text-slate-900">{user.fullName}</p>
-          <p className="text-sm text-slate-500">{user.email ?? 'No email attached'}</p>
+        <div className="flex items-center gap-3">
+          <div className="relative h-12 w-12 overflow-hidden rounded-2xl border border-rose-100 bg-rose-50">
+            <MarketplaceImage
+              src={user.avatarUrl}
+              alt={user.fullName}
+              fill
+              sizes="48px"
+              className="object-cover"
+            />
+          </div>
+          <div>
+            <p className="font-semibold text-slate-900">{user.fullName}</p>
+            <p className="text-sm text-slate-500">{user.email ?? 'No email attached'}</p>
+          </div>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <span
@@ -2055,7 +2302,7 @@ export function AdminVendorsManager() {
           <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400">Select all vendors</span>
         </div>
         <div className="mt-3 space-y-3">
-          {vendors.map((vendor: { id: string; businessName: string; approvalStatus: string; owner: { email?: string | null } }) => (
+          {vendors.map((vendor: { id: string; businessName: string; avatarUrl?: string | null; approvalStatus: string; owner: { email?: string | null } }) => (
             <div key={vendor.id} className="flex items-center gap-4">
                <input 
                 type="checkbox" 
@@ -2078,7 +2325,7 @@ export function AdminVendorsManager() {
 function AdminVendorApprovalCard({
   vendor
 }: {
-  vendor: { id: string; businessName: string; approvalStatus: string; owner: { email?: string | null } };
+  vendor: { id: string; businessName: string; avatarUrl?: string | null; approvalStatus: string; owner: { email?: string | null } };
 }) {
   const [message, setMessage] = useState<string | null>(null);
   const [approveVendor, approveState] = useMutation(APPROVE_VENDOR_MUTATION, {
@@ -2104,9 +2351,20 @@ function AdminVendorApprovalCard({
   return (
     <div className="rounded-[20px] border border-rose-100 p-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p className="font-semibold text-slate-900">{vendor.businessName}</p>
-          <p className="text-sm text-slate-500">{vendor.owner.email ?? 'No owner email'}</p>
+        <div className="flex items-center gap-3">
+          <div className="relative h-12 w-12 overflow-hidden rounded-2xl border border-rose-100 bg-rose-50">
+            <MarketplaceImage
+              src={vendor.avatarUrl}
+              alt={vendor.businessName}
+              fill
+              sizes="48px"
+              className="object-cover"
+            />
+          </div>
+          <div>
+            <p className="font-semibold text-slate-900">{vendor.businessName}</p>
+            <p className="text-sm text-slate-500">{vendor.owner.email ?? 'No owner email'}</p>
+          </div>
         </div>
         <div className="flex flex-wrap gap-2">
           {['APPROVED', 'REJECTED', 'SUSPENDED'].map((status) => (

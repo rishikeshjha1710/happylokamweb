@@ -128,6 +128,7 @@ type WishlistRecord = {
 type PartnerProfileRecord = {
   id: string;
   businessName: string;
+  avatarUrl?: string | null;
   slug: string;
   city: string;
   state?: string | null;
@@ -184,6 +185,7 @@ type ServiceRecord = {
 type UserRecord = {
   id: string;
   fullName: string;
+  avatarUrl?: string | null;
   email?: string | null;
   username?: string | null;
   phone?: string | null;
@@ -196,6 +198,7 @@ type UserRecord = {
 type PartnerRecord = {
   id: string;
   businessName: string;
+  avatarUrl?: string | null;
   city: string;
   state?: string | null;
   approvalStatus: string;
